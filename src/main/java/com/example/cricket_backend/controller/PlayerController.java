@@ -13,36 +13,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.cricket_backend.model.User;
-import com.example.cricket_backend.service.UserService;
+import com.example.cricket_backend.model.Player;
+import com.example.cricket_backend.service.PlayerService;
 
 @RestController
-@RequestMapping("api/users")
-public class UserController {
+@RequestMapping("/api/player")
+public class PlayerController {
+
     @Autowired
-    public UserService userService;
+    public PlayerService playerService;
 
     @PostMapping("/create")
-    public void createUser(@RequestBody User user){
-        userService.createUser(user);
+    public void createPlayer(@RequestBody Player player){
+        playerService.createPlayer(player);
     }
 
     @GetMapping("/get")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    public List<Player> getAllPlayers(){
+        return playerService.getAllPlayers();
     }
 
     @GetMapping("/get/{id}")
-    public Optional<User> getUserById(@PathVariable long id){
-        return userService.getUserById(id);
+    public Optional<Player> getPlayerByID(@PathVariable long id){
+        return playerService.getPlayerById(id);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deletePlayer(@PathVariable long id){
+        playerService.deletePlayer(id);
     }
     
-    @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable long id){
-        userService.deleteUser(id);
-    }
     @PutMapping("/update/{id}")
-    public void updateUser(@PathVariable long id,@RequestBody User user){
-        userService.updateUser(id, user);
+    public void updatePlayer(@PathVariable long id,@RequestBody Player player){
+        playerService.updatePlayer(id, player);
     }
 }

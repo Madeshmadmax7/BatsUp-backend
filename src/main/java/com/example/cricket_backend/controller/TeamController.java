@@ -13,36 +13,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.cricket_backend.model.User;
-import com.example.cricket_backend.service.UserService;
+import com.example.cricket_backend.model.Team;
+import com.example.cricket_backend.service.TeamService;
 
 @RestController
-@RequestMapping("api/users")
-public class UserController {
+@RequestMapping("/api/team")
+public class TeamController {
+
     @Autowired
-    public UserService userService;
+    public TeamService teamService;
 
     @PostMapping("/create")
-    public void createUser(@RequestBody User user){
-        userService.createUser(user);
+    public void createTeam(@RequestBody Team team){
+        teamService.createTeam(team);
     }
 
     @GetMapping("/get")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    public List<Team> getAllTeams(){
+        return teamService.getAllTeams();
     }
 
     @GetMapping("/get/{id}")
-    public Optional<User> getUserById(@PathVariable long id){
-        return userService.getUserById(id);
+    public Optional<Team> getTeamById(@PathVariable long id){
+        return teamService.getTeamById(id);
     }
-    
+
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable long id){
-        userService.deleteUser(id);
+    public void deleteTeamById(@PathVariable long id){
+        teamService.deleteTeamById(id);
     }
+
     @PutMapping("/update/{id}")
-    public void updateUser(@PathVariable long id,@RequestBody User user){
-        userService.updateUser(id, user);
+    public void updateTeam(@PathVariable long id,@RequestBody Team team){
+        teamService.updateTeam(id, team);
     }
 }

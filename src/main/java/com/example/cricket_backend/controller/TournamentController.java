@@ -13,36 +13,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.cricket_backend.model.User;
-import com.example.cricket_backend.service.UserService;
+import com.example.cricket_backend.model.Tournament;
+import com.example.cricket_backend.service.TournamentService;
 
 @RestController
-@RequestMapping("api/users")
-public class UserController {
+@RequestMapping("/api/tournaments")
+public class TournamentController {
     @Autowired
-    public UserService userService;
+    public TournamentService tournamentService;
 
     @PostMapping("/create")
-    public void createUser(@RequestBody User user){
-        userService.createUser(user);
+    public void createTournament(@RequestBody Tournament tournament){
+        tournamentService.createTournament(tournament);
     }
 
     @GetMapping("/get")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    public List<Tournament> getAllTournaments(){
+        return tournamentService.getAllTournaments();
     }
 
     @GetMapping("/get/{id}")
-    public Optional<User> getUserById(@PathVariable long id){
-        return userService.getUserById(id);
+    public Optional<Tournament> getTournamentById(@PathVariable long id){
+        return tournamentService.getTournamentById(id);
     }
-    
+
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable long id){
-        userService.deleteUser(id);
+    public void deleteTournament(@PathVariable long id){
+        tournamentService.deleteTournament(id);
     }
+
     @PutMapping("/update/{id}")
-    public void updateUser(@PathVariable long id,@RequestBody User user){
-        userService.updateUser(id, user);
+    public void updateTournament(@PathVariable long id,@RequestBody Tournament tournament){
+        tournamentService.updateTournament(id, tournament);
     }
 }
