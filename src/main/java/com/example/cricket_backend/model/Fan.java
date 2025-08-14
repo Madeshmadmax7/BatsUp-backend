@@ -1,23 +1,26 @@
 package com.example.cricket_backend.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
 
 @Entity
-@Table(name = "_user")
-public class User {
+public class Fan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
+    private String name;
     private String email;
-    private String password;
 
-    private String role;
+    @OneToMany(mappedBy = "bookedBy", cascade = CascadeType.ALL)
+    private List<Match> bookedMatches;
 
     public Long getId() {
         return id;
@@ -27,12 +30,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -43,21 +46,14 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public List<Match> getBookedMatches() {
+        return bookedMatches;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public void setBookedMatches(List<Match> bookedMatches) {
+        this.bookedMatches = bookedMatches;
     }
 
     
+
 }

@@ -22,15 +22,15 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    public Optional<Player> getPlayerById(long id){
+    public Optional<Player> getPlayerById(Long id){
         return playerRepository.findById(id);
     }
 
-    public void deletePlayer(long id){
+    public void deletePlayer(Long id){
         playerRepository.deleteById(id);
     }
 
-    public void updatePlayer(long id,Player player){
+    public void updatePlayer(Long id,Player player){
         if(playerRepository.existsById(id)){
             playerRepository.save(player);
         }

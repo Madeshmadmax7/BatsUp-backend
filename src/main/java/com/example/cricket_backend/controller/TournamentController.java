@@ -33,17 +33,17 @@ public class TournamentController {
     }
 
     @GetMapping("/get/{id}")
-    public Optional<Tournament> getTournamentById(@PathVariable long id){
+    public Optional<Tournament> getTournamentById(@PathVariable Long id){
         return tournamentService.getTournamentById(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTournament(@PathVariable long id){
+    public void deleteTournament(@PathVariable Long id){
         tournamentService.deleteTournament(id);
     }
 
     @PutMapping("/update/{id}")
-    public void updateTournament(@PathVariable long id,@RequestBody Tournament tournament){
+    public void updateTournament(@PathVariable Long id,@RequestBody Tournament tournament){
         tournamentService.updateTournament(id, tournament);
     }
 }

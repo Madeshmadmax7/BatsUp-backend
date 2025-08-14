@@ -23,15 +23,15 @@ public class TournamentService {
         return tournamentRepository.findAll();
     }
 
-    public Optional<Tournament> getTournamentById(long id){
+    public Optional<Tournament> getTournamentById(Long id){
         return tournamentRepository.findById(id);
     }
     
-    public void deleteTournament(long id){
+    public void deleteTournament(Long id){
         tournamentRepository.deleteById(id);
     }
 
-    public void updateTournament(long id,Tournament tournament){
+    public void updateTournament(Long id,Tournament tournament){
         if(tournamentRepository.existsById(id)){
             tournamentRepository.save(tournament);
         }

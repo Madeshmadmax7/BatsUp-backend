@@ -22,15 +22,15 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public Optional<Team> getTeamById(long id){
+    public Optional<Team> getTeamById(Long id){
         return teamRepository.findById(id);
     }
 
-    public void deleteTeamById(long id){
+    public void deleteTeamById(Long id){
         teamRepository.deleteById(id);
     }
 
-    public void updateTeam(long id,Team team){
+    public void updateTeam(Long id,Team team){
         if(teamRepository.existsById(id)){
             teamRepository.save(team);
         }

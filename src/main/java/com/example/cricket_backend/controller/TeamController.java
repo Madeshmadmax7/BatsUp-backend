@@ -34,17 +34,17 @@ public class TeamController {
     }
 
     @GetMapping("/get/{id}")
-    public Optional<Team> getTeamById(@PathVariable long id){
+    public Optional<Team> getTeamById(@PathVariable Long id){
         return teamService.getTeamById(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTeamById(@PathVariable long id){
+    public void deleteTeamById(@PathVariable Long id){
         teamService.deleteTeamById(id);
     }
 
     @PutMapping("/update/{id}")
-    public void updateTeam(@PathVariable long id,@RequestBody Team team){
+    public void updateTeam(@PathVariable Long id,@RequestBody Team team){
         teamService.updateTeam(id, team);
     }
 }
