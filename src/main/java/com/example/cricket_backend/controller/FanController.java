@@ -18,11 +18,7 @@ public class FanController {
     @Autowired
     private FanService fanService;
 
-    @PostMapping("/create")
-    public void createFan(@RequestBody FanDTO fanDTO){
-        Fan fan = FanMapper.toEntity(fanDTO);
-        fanService.createFan(fan);
-    }
+
 
     @GetMapping("/get")
     public List<FanDTO> getAllFans(){
@@ -38,11 +34,18 @@ public class FanController {
             .orElse(null);
     }
 
-    @PutMapping("/update/{id}")
-    public void updateFan(@PathVariable Long id, @RequestBody FanDTO fanDTO){
+    @PostMapping("/create")
+    public void createFan(@RequestBody FanDTO fanDTO) {
         Fan fan = FanMapper.toEntity(fanDTO);
-        fanService.updateFan(id, fan);
+        fanService.createFan(fan, fanDTO.getFollowedTeamIds());
     }
+
+    @PutMapping("/update/{id}")
+    public void updateFan(@PathVariable Long id, @RequestBody FanDTO fanDTO) {
+        Fan fan = FanMapper.toEntity(fanDTO);
+        fanService.updateFan(id, fan, fanDTO.getFollowedTeamIds());
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public void deleteFan(@PathVariable Long id){

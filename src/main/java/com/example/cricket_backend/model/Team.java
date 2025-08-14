@@ -41,6 +41,9 @@ public class Team {
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Match> matches;
 
+    @ManyToMany(mappedBy = "followedTeams")
+    private List<Fan> followers;
+
     public Long getId() {
         return id;
     }
@@ -137,6 +140,13 @@ public class Team {
         this.matches = matches;
     }
 
+    public List<Fan> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Fan> followers) {
+        this.followers = followers;
+    }
 
     
 }

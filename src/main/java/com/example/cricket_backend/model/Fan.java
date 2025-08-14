@@ -7,6 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -21,6 +24,14 @@ public class Fan {
 
     @OneToMany(mappedBy = "bookedBy", cascade = CascadeType.ALL)
     private List<Match> bookedMatches;
+
+    @ManyToMany
+    @JoinTable(
+        name = "fan_followed_teams",
+        joinColumns = @JoinColumn(name = "fan_id"),
+        inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
+    private List<Team> followedTeams;
 
     public Long getId() {
         return id;
@@ -54,6 +65,11 @@ public class Fan {
         this.bookedMatches = bookedMatches;
     }
 
-    
+    public List<Team> getFollowedTeams() {
+    return followedTeams;
+}
 
+    public void setFollowedTeams(List<Team> followedTeams) {
+        this.followedTeams = followedTeams;
+    }
 }

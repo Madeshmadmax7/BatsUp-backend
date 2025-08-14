@@ -1,9 +1,9 @@
 package com.example.cricket_backend.mapper;
 
 import java.util.stream.Collectors;
-
 import com.example.cricket_backend.dto.FanDTO;
 import com.example.cricket_backend.model.Fan;
+import com.example.cricket_backend.model.Team;
 
 public class FanMapper {
 
@@ -12,12 +12,23 @@ public class FanMapper {
         dto.setId(fan.getId());
         dto.setName(fan.getName());
         dto.setEmail(fan.getEmail());
+
         if (fan.getBookedMatches() != null) {
             dto.setBookedMatchIds(
-                    fan.getBookedMatches().stream()
-                            .map(m -> m.getId())
-                            .collect(Collectors.toList()));
+                fan.getBookedMatches().stream()
+                    .map(m -> m.getId())
+                    .collect(Collectors.toList())
+            );
         }
+
+        if (fan.getFollowedTeams() != null) {
+            dto.setFollowedTeamIds(
+                fan.getFollowedTeams().stream()
+                    .map(Team::getId)
+                    .collect(Collectors.toList())
+            );
+        }
+
         return dto;
     }
 
