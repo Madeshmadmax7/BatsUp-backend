@@ -12,6 +12,8 @@ public class TournamentMapper {
         dto.setVenue(tournament.getVenue());
         dto.setDate(tournament.getStartDate());
         dto.setDescription(tournament.getDescription());
+        dto.setImage(tournament.getImage());
+
 
         if (tournament.getTeams() != null) {
             dto.setTeams(

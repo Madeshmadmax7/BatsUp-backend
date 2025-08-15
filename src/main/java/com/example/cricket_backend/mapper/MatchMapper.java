@@ -15,6 +15,7 @@ public class MatchMapper {
         dto.setImage(match.getImage());
         dto.setType(match.getType());
         dto.setLocation(match.getVenue());
+        dto.setScoreDetail(ScoreDetailMapper.toDTO(match.getScoreDetail()));
         if (match.getDate() != null)
             dto.setDate(match.getDate().toString());
         if (match.getTournament() != null)
@@ -34,6 +35,8 @@ public class MatchMapper {
         match.setImage(dto.getImage());
         match.setType(dto.getType());
         match.setVenue(dto.getLocation());
+        match.setScoreDetail(ScoreDetailMapper.toEntity(dto.getScoreDetail()));
+
         if (dto.getDate() != null)
             match.setDate(java.time.LocalDate.parse(dto.getDate()));
         return match;

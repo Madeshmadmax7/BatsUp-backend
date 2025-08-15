@@ -1,9 +1,12 @@
 package com.example.cricket_backend.dto;
 
+import java.util.List;
+
 public class TeamSummaryDTO {
     private Long id;
     private String teamName;
-
+    private List<PlayerSummaryDTO> players;
+    
     public Long getId() {
         return id;
     }
@@ -17,4 +20,13 @@ public class TeamSummaryDTO {
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
+    
+    public List<PlayerSummaryDTO> getPlayers() {
+        return players;
+    }
+    public void setPlayers(List<PlayerSummaryDTO> players) {
+        this.players = players;
+    }
+    
 }
+

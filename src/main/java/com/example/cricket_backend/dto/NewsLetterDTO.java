@@ -1,31 +1,16 @@
-package com.example.cricket_backend.model;
+package com.example.cricket_backend.dto;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
-@Entity
-public class NewsLetter {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class NewsLetterDTO {
     private Long id;
-
     private String subject;
     private String summary;
     private LocalDate createdAt;
+    private Long teamId;
     private String imageLink; // S3 or image URL
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
-
-    // Getters and setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -58,19 +43,19 @@ public class NewsLetter {
         this.createdAt = createdAt;
     }
 
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
+
     public String getImageLink() {
         return imageLink;
     }
 
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
     }
 }

@@ -8,6 +8,8 @@ public class TournamentDTO {
     private String venue;
     private LocalDate date;
     private String description;
+    private String image;
+
     private List<TeamSummaryDTO> teams;
     private List<MatchSummaryDTO> matches;
 
@@ -32,6 +34,13 @@ public class TournamentDTO {
         this.date = date;
     }
 
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
     public String getDescription() {
         return description;
     }

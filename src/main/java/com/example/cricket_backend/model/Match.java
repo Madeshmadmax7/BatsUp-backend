@@ -42,6 +42,13 @@ public class Match {
     private Round round;
 
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "score_detail_id")
+    private ScoreDetail scoreDetail;
+
+    public ScoreDetail getScoreDetail() { return scoreDetail; }
+    public void setScoreDetail(ScoreDetail scoreDetail) { this.scoreDetail = scoreDetail; }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
