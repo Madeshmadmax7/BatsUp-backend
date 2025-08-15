@@ -41,6 +41,9 @@ public class Tournament {
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Match> matches;
 
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
+    private List<Round> rounds;
+
     public Long getId() {
         return id;
     }
@@ -121,6 +124,13 @@ public class Tournament {
         this.matches = matches;
     }
 
+    public List<Round> getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(List<Round> rounds) {
+        this.rounds = rounds;
+    }
 
     
 }

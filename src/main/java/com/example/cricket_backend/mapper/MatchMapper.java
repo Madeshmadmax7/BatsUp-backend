@@ -1,37 +1,41 @@
+// MatchMapper.java
 package com.example.cricket_backend.mapper;
 
+import java.util.stream.Collectors;
 
 import com.example.cricket_backend.dto.MatchDTO;
 import com.example.cricket_backend.model.Match;
-
+import com.example.cricket_backend.model.Fan;
 
 public class MatchMapper {
 
     public static MatchDTO toDTO(Match match) {
         MatchDTO dto = new MatchDTO();
         dto.setId(match.getId());
-        dto.setVenue(match.getVenue());
-        dto.setHomeTeam(match.getHomeTeam());
-        dto.setAwayTeam(match.getAwayTeam());
-
-        if (match.getTournament() != null) {
+        dto.setImage(match.getImage());
+        dto.setType(match.getType());
+        dto.setLocation(match.getVenue());
+        if (match.getDate() != null)
+            dto.setDate(match.getDate().toString());
+        if (match.getTournament() != null)
             dto.setTournamentId(match.getTournament().getId());
-        }
-        if (match.getTeam() != null) {
-            dto.setTeamId(match.getTeam().getId());
-        }
-        if (match.getBookedBy() != null) {
-            dto.setBookedByFanId(match.getBookedBy().getId());
-        }
+        if (match.getHomeTeam() != null)
+            dto.setHomeTeamId(match.getHomeTeam().getId());
+        if (match.getAwayTeam() != null)
+            dto.setAwayTeamId(match.getAwayTeam().getId());
+        if (match.getFans() != null)
+            dto.setFanIds(match.getFans().stream().map(Fan::getId).collect(Collectors.toList()));
         return dto;
     }
 
     public static Match toEntity(MatchDTO dto) {
         Match match = new Match();
         match.setId(dto.getId());
-        match.setVenue(dto.getVenue());
-        match.setHomeTeam(dto.getHomeTeam());
-        match.setAwayTeam(dto.getAwayTeam());
+        match.setImage(dto.getImage());
+        match.setType(dto.getType());
+        match.setVenue(dto.getLocation());
+        if (dto.getDate() != null)
+            match.setDate(java.time.LocalDate.parse(dto.getDate()));
         return match;
     }
 }

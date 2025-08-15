@@ -1,11 +1,15 @@
 package com.example.cricket_backend.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Player {
@@ -27,6 +31,12 @@ public class Player {
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @ManyToOne
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
+
+    @OneToMany(mappedBy = "round", cascade = CascadeType.ALL)
+    private List<Match> matches;
 
     public Long getId() {
         return id;
@@ -115,6 +125,26 @@ public class Player {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
+
+
+    public List<Match> getMatches() {
+        return matches;
+    }
+
+
+    public void setMatches(List<Match> matches) {
+        this.matches = matches;
     }
 
     

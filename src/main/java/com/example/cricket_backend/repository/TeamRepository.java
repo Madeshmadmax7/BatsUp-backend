@@ -7,5 +7,5 @@ import com.example.cricket_backend.model.Team;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team,Long>{
-
+    Team findByTeamName(String teamName);
 }

@@ -8,8 +8,17 @@ public class MatchSummaryMapper {
         MatchSummaryDTO dto = new MatchSummaryDTO();
         dto.setId(match.getId());
         dto.setVenue(match.getVenue());
-        dto.setHomeTeam(match.getHomeTeam());
-        dto.setAwayTeam(match.getAwayTeam());
+
+        if (match.getHomeTeam() != null) {
+            dto.setHomeTeam(match.getHomeTeam().getTeamName());
+        } else {
+            dto.setHomeTeam(null);
+        }
+        if (match.getAwayTeam() != null) {
+            dto.setAwayTeam(match.getAwayTeam().getTeamName());
+        } else {
+            dto.setAwayTeam(null);
+        }
         return dto;
     }
 }

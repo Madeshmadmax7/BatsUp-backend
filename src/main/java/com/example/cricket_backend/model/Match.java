@@ -1,13 +1,9 @@
+// Match.java (Entity)
 package com.example.cricket_backend.model;
 
 import java.time.LocalDate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 public class Match {
@@ -16,10 +12,9 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String image;
+    private String type;
     private String venue;
-    private String homeTeam;
-    private String awayTeam;
-
     private LocalDate date;
 
     @ManyToOne
@@ -27,76 +22,58 @@ public class Match {
     private Tournament tournament;
 
     @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @JoinColumn(name = "home_team_id")
+    private Team homeTeam;
 
     @ManyToOne
-    @JoinColumn(name = "fan_id")
-    private Fan bookedBy;
+    @JoinColumn(name = "away_team_id")
+    private Team awayTeam;
 
-    public Long getId() {
-        return id;
+    @ManyToMany
+    @JoinTable(
+        name = "match_fans",
+        joinColumns = @JoinColumn(name = "match_id"),
+        inverseJoinColumns = @JoinColumn(name = "fan_id")
+    )
+    private List<Fan> fans;
+
+    @ManyToOne
+    @JoinColumn(name = "round_id")
+    private Round round;
+
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
+    public String getVenue() { return venue; }
+    public void setVenue(String venue) { this.venue = venue; }
+
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
+
+    public Tournament getTournament() { return tournament; }
+    public void setTournament(Tournament tournament) { this.tournament = tournament; }
+
+    public Team getHomeTeam() { return homeTeam; }
+    public void setHomeTeam(Team homeTeam) { this.homeTeam = homeTeam; }
+
+    public Team getAwayTeam() { return awayTeam; }
+    public void setAwayTeam(Team awayTeam) { this.awayTeam = awayTeam; }
+
+    public List<Fan> getFans() { return fans; }
+    public void setFans(List<Fan> fans) { this.fans = fans; }
+
+    public Round getRound() {
+        return round;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setRound(Round round) {
+        this.round = round;
     }
-
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
-
-    public String getHomeTeam() {
-        return homeTeam;
-    }
-
-    public void setHomeTeam(String homeTeam) {
-        this.homeTeam = homeTeam;
-    }
-
-    public String getAwayTeam() {
-        return awayTeam;
-    }
-
-    public void setAwayTeam(String awayTeam) {
-        this.awayTeam = awayTeam;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Tournament getTournament() {
-        return tournament;
-    }
-
-    public void setTournament(Tournament tournament) {
-        this.tournament = tournament;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public Fan getBookedBy() {
-        return bookedBy;
-    }
-
-    public void setBookedBy(Fan bookedBy) {
-        this.bookedBy = bookedBy;
-    }
-
     
 }
