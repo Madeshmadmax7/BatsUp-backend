@@ -1,3 +1,4 @@
+// com/example/cricket_backend/mapper/ScoreDetailMapper.java
 package com.example.cricket_backend.mapper;
 
 import com.example.cricket_backend.dto.ScoreDetailDTO;

@@ -1,10 +1,8 @@
-// MatchService.java
 package com.example.cricket_backend.service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,17 +26,14 @@ public class MatchService {
     public MatchDTO createMatch(MatchDTO dto) {
         Match match = MatchMapper.toEntity(dto);
 
-        if (dto.getTournamentId() != null) {
+        if (dto.getTournamentId() != null)
             tournamentRepository.findById(dto.getTournamentId()).ifPresent(match::setTournament);
-        }
 
-        if (dto.getHomeTeamId() != null) {
+        if (dto.getHomeTeamId() != null)
             teamRepository.findById(dto.getHomeTeamId()).ifPresent(match::setHomeTeam);
-        }
 
-        if (dto.getAwayTeamId() != null) {
+        if (dto.getAwayTeamId() != null)
             teamRepository.findById(dto.getAwayTeamId()).ifPresent(match::setAwayTeam);
-        }
 
         if (dto.getFanIds() != null) {
             List<Fan> fans = dto.getFanIds().stream()
@@ -60,25 +55,22 @@ public class MatchService {
             match.setImage(dto.getImage());
             match.setType(dto.getType());
             match.setVenue(dto.getLocation());
-            match.setDate(java.time.LocalDate.parse(dto.getDate()));
+            if (dto.getDate() != null) match.setDate(java.time.LocalDate.parse(dto.getDate()));
 
-            if (dto.getTournamentId() != null) {
+            if (dto.getTournamentId() != null)
                 tournamentRepository.findById(dto.getTournamentId()).ifPresent(match::setTournament);
-            } else {
+            else
                 match.setTournament(null);
-            }
 
-            if (dto.getHomeTeamId() != null) {
+            if (dto.getHomeTeamId() != null)
                 teamRepository.findById(dto.getHomeTeamId()).ifPresent(match::setHomeTeam);
-            } else {
+            else
                 match.setHomeTeam(null);
-            }
 
-            if (dto.getAwayTeamId() != null) {
+            if (dto.getAwayTeamId() != null)
                 teamRepository.findById(dto.getAwayTeamId()).ifPresent(match::setAwayTeam);
-            } else {
+            else
                 match.setAwayTeam(null);
-            }
 
             if (dto.getFanIds() != null) {
                 List<Fan> fans = dto.getFanIds().stream()

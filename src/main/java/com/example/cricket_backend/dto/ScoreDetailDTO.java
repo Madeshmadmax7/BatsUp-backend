@@ -7,10 +7,8 @@ public class ScoreDetailDTO {
 
     public int getRuns() { return runs; }
     public void setRuns(int runs) { this.runs = runs; }
-
     public int getOvers() { return overs; }
     public void setOvers(int overs) { this.overs = overs; }
-
     public int getWickets() { return wickets; }
     public void setWickets(int wickets) { this.wickets = wickets; }
 }

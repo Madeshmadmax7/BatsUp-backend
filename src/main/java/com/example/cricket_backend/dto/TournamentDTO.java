@@ -1,3 +1,4 @@
+// com/example/cricket_backend/dto/TournamentDTO.java
 package com.example.cricket_backend.dto;
 
 import java.time.LocalDate;
@@ -13,52 +14,24 @@ public class TournamentDTO {
     private List<TeamSummaryDTO> teams;
     private List<MatchSummaryDTO> matches;
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getVenue() {
-        return venue;
-    }
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
+    public String getVenue() { return venue; }
+    public void setVenue(String venue) { this.venue = venue; }
 
-    public LocalDate getDate() {
-        return date;
-    }
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-    public String getImage() {
-        return image;
-    }
-    public void setImage(String image) {
-        this.image = image;
-    }
-    
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
 
-    public List<TeamSummaryDTO> getTeams() {
-        return teams;
-    }
-    public void setTeams(List<TeamSummaryDTO> teams) {
-        this.teams = teams;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public List<MatchSummaryDTO> getMatches() {
-        return matches;
-    }
-    public void setMatches(List<MatchSummaryDTO> matches) {
-        this.matches = matches;
-    }
+    public List<TeamSummaryDTO> getTeams() { return teams; }
+    public void setTeams(List<TeamSummaryDTO> teams) { this.teams = teams; }
+
+    public List<MatchSummaryDTO> getMatches() { return matches; }
+    public void setMatches(List<MatchSummaryDTO> matches) { this.matches = matches; }
 }

@@ -102,8 +102,10 @@ public class FanService {
         List<NewsLetter> otherNews = newsLetterRepository
                 .findByTeamIdNotInOrderByCreatedAtDesc(followedTeamIds);
 
-        List<Match> followedMatches = matchRepository
-                .findByTeamIdIn(followedTeamIds);
+        List<Match> followedMatches =matchRepository
+            .findByTeamIds(followedTeamIds);
+
+
 
         return new FanDashboardDTO(followedNews, otherNews, followedMatches);
 

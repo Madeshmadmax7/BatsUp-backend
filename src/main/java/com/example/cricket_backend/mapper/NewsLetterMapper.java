@@ -1,3 +1,4 @@
+// com/example/cricket_backend/mapper/NewsLetterMapper.java
 package com.example.cricket_backend.mapper;
 
 import com.example.cricket_backend.dto.NewsLetterDTO;
@@ -5,6 +6,7 @@ import com.example.cricket_backend.model.NewsLetter;
 
 public class NewsLetterMapper {
     public static NewsLetterDTO toDTO(NewsLetter newsLetter) {
+        if (newsLetter == null) return null;
         NewsLetterDTO dto = new NewsLetterDTO();
         dto.setId(newsLetter.getId());
         dto.setSubject(newsLetter.getSubject());
@@ -18,6 +20,7 @@ public class NewsLetterMapper {
     }
 
     public static NewsLetter toEntity(NewsLetterDTO dto) {
+        if (dto == null) return null;
         NewsLetter entity = new NewsLetter();
         entity.setId(dto.getId());
         entity.setSubject(dto.getSubject());

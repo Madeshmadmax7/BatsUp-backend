@@ -1,20 +1,20 @@
-// Match.java (Entity)
+// com/example/cricket_backend/model/Match.java
 package com.example.cricket_backend.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import jakarta.persistence.*;
 
 @Entity
+@Table(name = "matches")
 public class Match {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String image;
     private String type;
     private String venue;
+    private String image;
     private LocalDate date;
 
     @ManyToOne
@@ -37,29 +37,21 @@ public class Match {
     )
     private List<Fan> fans;
 
-    @ManyToOne
-    @JoinColumn(name = "round_id")
-    private Round round;
-
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "score_detail_id")
     private ScoreDetail scoreDetail;
 
-    public ScoreDetail getScoreDetail() { return scoreDetail; }
-    public void setScoreDetail(ScoreDetail scoreDetail) { this.scoreDetail = scoreDetail; }
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
 
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
     public String getVenue() { return venue; }
     public void setVenue(String venue) { this.venue = venue; }
+
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
@@ -76,11 +68,6 @@ public class Match {
     public List<Fan> getFans() { return fans; }
     public void setFans(List<Fan> fans) { this.fans = fans; }
 
-    public Round getRound() {
-        return round;
-    }
-    public void setRound(Round round) {
-        this.round = round;
-    }
-    
+    public ScoreDetail getScoreDetail() { return scoreDetail; }
+    public void setScoreDetail(ScoreDetail scoreDetail) { this.scoreDetail = scoreDetail; }
 }

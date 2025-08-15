@@ -1,12 +1,13 @@
+// com/example/cricket_backend/mapper/PlayerMapper.java
 package com.example.cricket_backend.mapper;
 
 import com.example.cricket_backend.dto.PlayerDTO;
 import com.example.cricket_backend.model.Player;
 
-
 public class PlayerMapper {
 
     public static PlayerDTO toDTO(Player player) {
+        if (player == null) return null;
         PlayerDTO dto = new PlayerDTO();
         dto.setId(player.getId());
         dto.setPlayerName(player.getPlayerName());
@@ -22,6 +23,7 @@ public class PlayerMapper {
     }
 
     public static Player toEntity(PlayerDTO dto) {
+        if (dto == null) return null;
         Player player = new Player();
         player.setId(dto.getId());
         player.setPlayerName(dto.getPlayerName());

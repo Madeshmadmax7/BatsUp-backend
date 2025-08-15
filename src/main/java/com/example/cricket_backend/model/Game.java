@@ -1,25 +1,31 @@
+// com/example/cricket_backend/model/Game.java
 package com.example.cricket_backend.model;
 
 import jakarta.persistence.*;
 
 @Entity
 public class Game {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Keeping as String per your DTO
     private String date;
     private String time;
 
     @ManyToOne
+    @JoinColumn(name = "team1_id")
     private Team team1;
-    
+
     @ManyToOne
+    @JoinColumn(name = "team2_id")
     private Team team2;
 
     @ManyToOne
+    @JoinColumn(name = "round_id")
     private Round round;
-    
+
     public Long getId() {
         return id;
     }

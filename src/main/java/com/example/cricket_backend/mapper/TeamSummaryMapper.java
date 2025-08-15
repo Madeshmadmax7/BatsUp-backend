@@ -1,7 +1,7 @@
+// com/example/cricket_backend/mapper/TeamSummaryMapper.java
 package com.example.cricket_backend.mapper;
 
 import java.util.stream.Collectors;
-
 import com.example.cricket_backend.dto.PlayerSummaryDTO;
 import com.example.cricket_backend.dto.TeamSummaryDTO;
 import com.example.cricket_backend.model.Player;
@@ -28,13 +28,14 @@ public class TeamSummaryMapper {
 
     private static PlayerSummaryDTO playerToDTO(Player player) {
         if (player == null) return null;
-
         PlayerSummaryDTO dto = new PlayerSummaryDTO();
         dto.setId(player.getId());
         dto.setName(player.getPlayerName());
-        dto.setJersey(Integer.parseInt(player.getPlayerJersey()));
+        try {
+            dto.setJersey(Integer.parseInt(player.getPlayerJersey()));
+        } catch (Exception e) {
+            dto.setJersey(0);
+        }
         return dto;
-        
     }
-
 }
