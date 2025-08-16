@@ -13,6 +13,7 @@ import com.example.cricket_backend.service.NewsLetterService;
 
 @RestController
 @RequestMapping("/api/news")
+@CrossOrigin(origins = "http://localhost:5173")
 public class NewsLetterController {
 
     @Autowired

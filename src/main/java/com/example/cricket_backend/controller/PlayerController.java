@@ -14,37 +14,38 @@ import com.example.cricket_backend.service.PlayerService;
 
 @RestController
 @RequestMapping("/api/player")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PlayerController {
 
     @Autowired
-    public PlayerService playerService;
+    private PlayerService playerService;
 
     @PostMapping("/create")
-    public void createPlayer(@RequestBody PlayerDTO playerDTO){
+    public void createPlayer(@RequestBody PlayerDTO playerDTO) {
         Player player = PlayerMapper.toEntity(playerDTO);
         playerService.createPlayer(player);
     }
 
     @GetMapping("/get")
-    public List<PlayerDTO> getAllPlayers(){
+    public List<PlayerDTO> getAllPlayers() {
         return playerService.getAllPlayers().stream()
                 .map(PlayerMapper::toDTO)
                 .toList();
     }
 
     @GetMapping("/get/{id}")
-    public Optional<PlayerDTO> getPlayerByID(@PathVariable Long id){
+    public Optional<PlayerDTO> getPlayerByID(@PathVariable Long id) {
         return playerService.getPlayerById(id)
                 .map(PlayerMapper::toDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deletePlayer(@PathVariable Long id){
+    public void deletePlayer(@PathVariable Long id) {
         playerService.deletePlayer(id);
     }
 
     @PutMapping("/update/{id}")
-    public void updatePlayer(@PathVariable Long id, @RequestBody PlayerDTO playerDTO){
+    public void updatePlayer(@PathVariable Long id, @RequestBody PlayerDTO playerDTO) {
         Player player = PlayerMapper.toEntity(playerDTO);
         playerService.updatePlayer(id, player);
     }

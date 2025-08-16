@@ -12,6 +12,7 @@ import com.example.cricket_backend.service.NotificationService;
 
 @RestController
 @RequestMapping("/api/notification")
+@CrossOrigin(origins = "http://localhost:5173")
 public class NotificationController {
 
     @Autowired

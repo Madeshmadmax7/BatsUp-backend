@@ -1,20 +1,22 @@
-// com/example/cricket_backend/controller/TournamentController.java
 package com.example.cricket_backend.controller;
+
+import com.example.cricket_backend.model.ScoreDetail;
+import com.example.cricket_backend.model.Team;
+import com.example.cricket_backend.model.Tournament;
+import com.example.cricket_backend.service.TournamentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import com.example.cricket_backend.model.Tournament;
-import com.example.cricket_backend.service.TournamentService;
-
 @RestController
 @RequestMapping("/api/tournaments")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TournamentController {
+
     @Autowired
-    public TournamentService tournamentService;
+    private TournamentService tournamentService;
 
     @PostMapping("/create")
     public void createTournament(@RequestBody Tournament tournament){
@@ -24,6 +26,16 @@ public class TournamentController {
     @GetMapping("/get")
     public List<Tournament> getAllTournaments(){
         return tournamentService.getAllTournaments();
+    }
+
+    @GetMapping("/{id}/teams")
+    public List<Team> getTeamsByTournament(@PathVariable Long id) {
+        return tournamentService.getTeamsByTournament(id);
+    }
+
+    @GetMapping("/{id}/scorecards")
+    public List<ScoreDetail> getScoreDetailsByTournament(@PathVariable Long id) {
+        return tournamentService.getScoreDetailsByTournament(id);
     }
 
     @GetMapping("/get/{id}")

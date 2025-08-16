@@ -13,6 +13,7 @@ import com.example.cricket_backend.service.MatchService;
 
 @RestController
 @RequestMapping("/api/match")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MatchController {
 
     @Autowired

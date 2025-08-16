@@ -1,4 +1,4 @@
-// com/example/cricket_backend/controller/RoundController.java
+// RoundController.java
 package com.example.cricket_backend.controller;
 
 import java.util.List;
@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.cricket_backend.dto.RoundDTO;
+import com.example.cricket_backend.dto.RoundWithMatchesDTO;
 import com.example.cricket_backend.dto.GameDTO;
 import com.example.cricket_backend.service.RoundService;
 
 @RestController
 @RequestMapping("/api/round")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoundController {
 
     @Autowired
@@ -26,6 +28,11 @@ public class RoundController {
     @GetMapping("/get")
     public List<RoundDTO> getAllRounds() {
         return roundService.getAllRounds();
+    }
+
+    @GetMapping("/with-matches")
+    public List<RoundWithMatchesDTO> getRoundsWithMatches() {
+        return roundService.getRoundsWithMatches();
     }
 
     @GetMapping("/get/{id}")

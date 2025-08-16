@@ -12,27 +12,28 @@ import com.example.cricket_backend.repository.PlayerRepository;
 
 @Service
 public class PlayerService {
-    @Autowired
-    public PlayerRepository playerRepository;
 
-    public void createPlayer(Player player){
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    public void createPlayer(Player player) {
         playerRepository.save(player);
     }
 
-    public List<Player> getAllPlayers(){
+    public List<Player> getAllPlayers() {
         return playerRepository.findAll();
     }
 
-    public Optional<Player> getPlayerById(Long id){
+    public Optional<Player> getPlayerById(Long id) {
         return playerRepository.findById(id);
     }
 
-    public void deletePlayer(Long id){
+    public void deletePlayer(Long id) {
         playerRepository.deleteById(id);
     }
 
-    public void updatePlayer(Long id, Player player){
-        if(playerRepository.existsById(id)) {
+    public void updatePlayer(Long id, Player player) {
+        if (playerRepository.existsById(id)) {
             player.setId(id);
             playerRepository.save(player);
         }

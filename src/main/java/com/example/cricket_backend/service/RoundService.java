@@ -9,14 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.cricket_backend.dto.RoundDTO;
+import com.example.cricket_backend.dto.RoundWithMatchesDTO;
 import com.example.cricket_backend.dto.GameDTO;
+import com.example.cricket_backend.dto.MatchSummaryDTO;
 import com.example.cricket_backend.mapper.RoundMapper;
 import com.example.cricket_backend.mapper.GameMapper;
 import com.example.cricket_backend.model.Round;
 import com.example.cricket_backend.model.Game;
+import com.example.cricket_backend.model.Match;
 import com.example.cricket_backend.model.Team;
 import com.example.cricket_backend.repository.RoundRepository;
 import com.example.cricket_backend.repository.GameRepository;
+import com.example.cricket_backend.repository.MatchRepository;
 import com.example.cricket_backend.repository.TeamRepository;
 
 @Service
@@ -30,6 +34,31 @@ public class RoundService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private MatchRepository matchRepository;
+
+    public List<RoundWithMatchesDTO> getRoundsWithMatches() {
+        List<Round> rounds = roundRepository.findAll();
+
+        return rounds.stream().map(round -> {
+            List<Match> tournamentMatches = matchRepository.findAll().stream()
+                    .filter(match -> match.getTournament() != null &&
+                            round.getTournament() != null &&
+                            match.getTournament().getId().equals(round.getTournament().getId()))
+                    .toList();
+
+            List<MatchSummaryDTO> matchDTOs = tournamentMatches.stream()
+                    .map(match -> new MatchSummaryDTO(
+                            match.getDate() != null ? match.getDate().toString() : "",
+                            match.getHomeTeam() != null ? match.getHomeTeam().getTeamName() : "TBD",
+                            match.getAwayTeam() != null ? match.getAwayTeam().getTeamName() : "TBD",
+                            "18:00"))
+                    .toList();
+
+            return new RoundWithMatchesDTO(round.getName(), matchDTOs);
+        }).toList();
+    }
 
     // Create Round (without games)
     public RoundDTO createRound(RoundDTO dto) {

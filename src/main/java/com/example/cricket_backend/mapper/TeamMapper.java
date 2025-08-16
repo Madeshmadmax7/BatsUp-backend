@@ -12,11 +12,18 @@ public class TeamMapper {
         TeamDTO dto = new TeamDTO();
         dto.setId(team.getId());
         dto.setTeamName(team.getTeamName());
+        dto.setTeamPassword(team.getTeamPassword());
         dto.setPhoneNumber(team.getPhoneNumber());
+        dto.setLogo(team.getLogo());
+        dto.setLocation(team.getLocation());
         dto.setTotalMatches(team.getTotalMatches());
         dto.setTotalWins(team.getTotalWins());
         dto.setTotalLoss(team.getTotalLoss());
-
+        // Calculate score/wickets (you can set from score detail if available)
+        dto.setScore(team.getPlayers() != null ?
+            String.valueOf(team.getPlayers().stream().mapToInt(p -> p.getRuns() != null ? p.getRuns() : 0).sum()) : "0");
+        dto.setWickets(team.getPlayers() != null ?
+            team.getPlayers().stream().mapToInt(p -> p.getBalls() != null ? p.getBalls() : 0).sum() : 0);
         if (team.getPlayers() != null) {
             dto.setPlayerIds(team.getPlayers()
                 .stream()
@@ -31,7 +38,10 @@ public class TeamMapper {
         Team team = new Team();
         team.setId(dto.getId());
         team.setTeamName(dto.getTeamName());
+        team.setTeamPassword(dto.getTeamPassword());
         team.setPhoneNumber(dto.getPhoneNumber());
+        team.setLogo(dto.getLogo());
+        team.setLocation(dto.getLocation());
         team.setTotalMatches(dto.getTotalMatches());
         team.setTotalWins(dto.getTotalWins());
         team.setTotalLoss(dto.getTotalLoss());

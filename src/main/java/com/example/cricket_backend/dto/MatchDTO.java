@@ -15,9 +15,6 @@ public class MatchDTO {
     private List<Long> fanIds;
     private ScoreDetailDTO scoreDetail;
 
-    public ScoreDetailDTO getScoreDetail() { return scoreDetail; }
-    public void setScoreDetail(ScoreDetailDTO scoreDetail) { this.scoreDetail = scoreDetail; }
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getImage() { return image; }
@@ -36,4 +33,6 @@ public class MatchDTO {
     public void setAwayTeamId(Long awayTeamId) { this.awayTeamId = awayTeamId; }
     public List<Long> getFanIds() { return fanIds; }
     public void setFanIds(List<Long> fanIds) { this.fanIds = fanIds; }
+    public ScoreDetailDTO getScoreDetail() { return scoreDetail; }
+    public void setScoreDetail(ScoreDetailDTO scoreDetail) { this.scoreDetail = scoreDetail; }
 }

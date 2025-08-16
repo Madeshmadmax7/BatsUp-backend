@@ -3,11 +3,11 @@ package com.example.cricket_backend.model;
 
 import jakarta.persistence.*;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Entity
 public class Team {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String teamName;

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class ScoreDetail {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -13,15 +13,47 @@ public class ScoreDetail {
     private int overs;
     private int wickets;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @ManyToOne
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
 
-    public int getRuns() { return runs; }
-    public void setRuns(int runs) { this.runs = runs; }
+    public Long getId() {
+        return id;
+    }
 
-    public int getOvers() { return overs; }
-    public void setOvers(int overs) { this.overs = overs; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public int getWickets() { return wickets; }
-    public void setWickets(int wickets) { this.wickets = wickets; }
+    public int getRuns() {
+        return runs;
+    }
+
+    public void setRuns(int runs) {
+        this.runs = runs;
+    }
+
+    public int getOvers() {
+        return overs;
+    }
+
+    public void setOvers(int overs) {
+        this.overs = overs;
+    }
+
+    public int getWickets() {
+        return wickets;
+    }
+
+    public void setWickets(int wickets) {
+        this.wickets = wickets;
+    }
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
 }

@@ -16,9 +16,13 @@ public class PlayerMapper {
         dto.setPlayedIn(player.getPlayedIn());
         dto.setPlayerType(player.getPlayerType());
         dto.setLastPlayedFor(player.getLastPlayedFor());
-        if (player.getTeam() != null) {
+        if (player.getTeam() != null)
             dto.setTeamId(player.getTeam().getId());
-        }
+        dto.setRuns(player.getRuns());
+        dto.setBalls(player.getBalls());
+        dto.setFours(player.getFours());
+        dto.setSixes(player.getSixes());
+        dto.setSr(player.getSr());
         return dto;
     }
 
@@ -32,6 +36,11 @@ public class PlayerMapper {
         player.setPlayedIn(dto.getPlayedIn());
         player.setPlayerType(dto.getPlayerType());
         player.setLastPlayedFor(dto.getLastPlayedFor());
+        player.setRuns(dto.getRuns());
+        player.setBalls(dto.getBalls());
+        player.setFours(dto.getFours());
+        player.setSixes(dto.getSixes());
+        player.setSr(dto.getSr());
         return player;
     }
 }
