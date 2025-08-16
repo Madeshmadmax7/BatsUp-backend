@@ -1,3 +1,4 @@
+// com/example/cricket_backend/service/NewsLetterService.java
 package com.example.cricket_backend.service;
 
 import java.util.List;
@@ -53,13 +54,13 @@ public class NewsLetterService {
         Optional<Fan> fanOpt = fanRepository.findById(fanId);
         if (fanOpt.isPresent()) {
             List<Long> teamIds = fanOpt.get().getFollowedTeams()
-                                .stream()
-                                .map(team -> team.getId())
-                                .collect(Collectors.toList());
+                    .stream()
+                    .map(team -> team.getId())
+                    .collect(Collectors.toList());
             List<NewsLetter> newsletters = newsLetterRepository.findByTeamIdInOrderByCreatedAtDesc(teamIds);
             return newsletters.stream()
-                .map(NewsLetterMapper::toDTO)
-                .collect(Collectors.toList());
+                    .map(NewsLetterMapper::toDTO)
+                    .collect(Collectors.toList());
         }
         return List.of();
     }

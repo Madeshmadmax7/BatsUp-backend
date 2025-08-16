@@ -1,3 +1,4 @@
+// com/example/cricket_backend/controller/TeamController.java
 package com.example.cricket_backend.controller;
 
 import java.util.List;
@@ -20,7 +21,6 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
-    // Create a new team with players
     @PostMapping("/create")
     public ResponseEntity<?> createTeam(@RequestBody TeamCreateRequest request) {
         TeamDTO teamDTO = request.getTeam();
@@ -34,7 +34,6 @@ public class TeamController {
         }
     }
 
-    // Player joins team with password validation
     @PostMapping("/{teamId}/join")
     public ResponseEntity<?> joinPlayer(@PathVariable Long teamId,
                                         @RequestParam String password,
@@ -47,14 +46,12 @@ public class TeamController {
         }
     }
 
-    // Get all teams
     @GetMapping("/get")
     public ResponseEntity<List<Team>> getAllTeams() {
         List<Team> teams = teamService.getAllTeams();
         return ResponseEntity.ok(teams);
     }
 
-    // Get team by id
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getTeamById(@PathVariable Long id) {
         return teamService.getTeamById(id)
@@ -62,7 +59,6 @@ public class TeamController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Delete team by id
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTeamById(@PathVariable Long id) {
         if (teamService.getTeamById(id).isPresent()) {
@@ -73,7 +69,6 @@ public class TeamController {
         }
     }
 
-    // Update team by id
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTeam(@PathVariable Long id, @RequestBody Team team) {
         if (teamService.getTeamById(id).isPresent()) {

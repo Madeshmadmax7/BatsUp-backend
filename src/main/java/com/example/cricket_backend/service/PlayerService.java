@@ -1,3 +1,4 @@
+// com/example/cricket_backend/service/PlayerService.java
 package com.example.cricket_backend.service;
 
 import java.util.List;
@@ -30,11 +31,10 @@ public class PlayerService {
         playerRepository.deleteById(id);
     }
 
-    public void updatePlayer(Long id,Player player){
-        if(playerRepository.existsById(id)){
+    public void updatePlayer(Long id, Player player){
+        if(playerRepository.existsById(id)) {
+            player.setId(id);
             playerRepository.save(player);
         }
     }
-
-    
 }

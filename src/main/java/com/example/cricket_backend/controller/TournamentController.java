@@ -1,17 +1,11 @@
+// com/example/cricket_backend/controller/TournamentController.java
 package com.example.cricket_backend.controller;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.cricket_backend.model.Tournament;
 import com.example.cricket_backend.service.TournamentService;
@@ -43,7 +37,7 @@ public class TournamentController {
     }
 
     @PutMapping("/update/{id}")
-    public void updateTournament(@PathVariable Long id,@RequestBody Tournament tournament){
+    public void updateTournament(@PathVariable Long id, @RequestBody Tournament tournament){
         tournamentService.updateTournament(id, tournament);
     }
 }

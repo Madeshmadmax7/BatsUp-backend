@@ -1,4 +1,3 @@
-// com/example/cricket_backend/dto/MatchSummaryDTO.java
 package com.example.cricket_backend.dto;
 
 public class MatchSummaryDTO {

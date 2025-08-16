@@ -33,7 +33,6 @@ public class TournamentMapper {
         return dto;
     }
 
-    // Optional reverse mapping if you ever need it
     public static Tournament toEntity(TournamentDTO dto) {
         if (dto == null) return null;
         Tournament t = new Tournament();

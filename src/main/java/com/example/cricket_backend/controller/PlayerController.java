@@ -1,18 +1,14 @@
+// com/example/cricket_backend/controller/PlayerController.java
 package com.example.cricket_backend.controller;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.example.cricket_backend.dto.PlayerDTO;
+import com.example.cricket_backend.mapper.PlayerMapper;
 import com.example.cricket_backend.model.Player;
 import com.example.cricket_backend.service.PlayerService;
 
@@ -24,27 +20,32 @@ public class PlayerController {
     public PlayerService playerService;
 
     @PostMapping("/create")
-    public void createPlayer(@RequestBody Player player){
+    public void createPlayer(@RequestBody PlayerDTO playerDTO){
+        Player player = PlayerMapper.toEntity(playerDTO);
         playerService.createPlayer(player);
     }
 
     @GetMapping("/get")
-    public List<Player> getAllPlayers(){
-        return playerService.getAllPlayers();
+    public List<PlayerDTO> getAllPlayers(){
+        return playerService.getAllPlayers().stream()
+                .map(PlayerMapper::toDTO)
+                .toList();
     }
 
     @GetMapping("/get/{id}")
-    public Optional<Player> getPlayerByID(@PathVariable Long id){
-        return playerService.getPlayerById(id);
+    public Optional<PlayerDTO> getPlayerByID(@PathVariable Long id){
+        return playerService.getPlayerById(id)
+                .map(PlayerMapper::toDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deletePlayer(@PathVariable Long id){
         playerService.deletePlayer(id);
     }
-    
+
     @PutMapping("/update/{id}")
-    public void updatePlayer(@PathVariable Long id,@RequestBody Player player){
+    public void updatePlayer(@PathVariable Long id, @RequestBody PlayerDTO playerDTO){
+        Player player = PlayerMapper.toEntity(playerDTO);
         playerService.updatePlayer(id, player);
     }
 }

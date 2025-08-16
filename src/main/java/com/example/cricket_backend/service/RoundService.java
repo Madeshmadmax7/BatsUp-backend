@@ -1,3 +1,4 @@
+// com/example/cricket_backend/service/RoundService.java
 package com.example.cricket_backend.service;
 
 import java.util.List;
@@ -71,7 +72,6 @@ public class RoundService {
         if (roundOpt.isPresent()) {
             Game game = GameMapper.toEntity(gameDTO);
 
-            // Lookup and set teams by their names
             if (gameDTO.getTeam1() != null) {
                 Team team1 = teamRepository.findByTeamName(gameDTO.getTeam1());
                 game.setTeam1(team1);
@@ -84,8 +84,6 @@ public class RoundService {
             Game saved = gameRepository.save(game);
             return GameMapper.toDTO(saved);
         }
-        return null; // or throw exception
+        return null;
     }
-
-    // Additional methods for game update/delete can be added similarly
 }

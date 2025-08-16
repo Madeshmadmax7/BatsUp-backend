@@ -1,4 +1,3 @@
-// com/example/cricket_backend/mapper/NewsLetterMapper.java
 package com.example.cricket_backend.mapper;
 
 import com.example.cricket_backend.dto.NewsLetterDTO;

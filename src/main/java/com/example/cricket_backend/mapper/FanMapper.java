@@ -5,20 +5,19 @@ import java.util.stream.Collectors;
 import com.example.cricket_backend.dto.FanDTO;
 import com.example.cricket_backend.model.Fan;
 import com.example.cricket_backend.model.Team;
+import com.example.cricket_backend.model.Match;
 
 public class FanMapper {
-
     public static FanDTO toDTO(Fan fan) {
         if (fan == null) return null;
         FanDTO dto = new FanDTO();
         dto.setId(fan.getId());
         dto.setName(fan.getName());
         dto.setEmail(fan.getEmail());
-
         if (fan.getBookedMatches() != null) {
             dto.setBookedMatchIds(
                 fan.getBookedMatches().stream()
-                    .map(m -> m.getId())
+                    .map(Match::getId)
                     .collect(Collectors.toList())
             );
         }
@@ -31,7 +30,6 @@ public class FanMapper {
         }
         return dto;
     }
-
     public static Fan toEntity(FanDTO dto) {
         if (dto == null) return null;
         Fan fan = new Fan();

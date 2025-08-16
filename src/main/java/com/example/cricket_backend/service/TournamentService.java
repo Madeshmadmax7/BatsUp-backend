@@ -1,3 +1,4 @@
+// com/example/cricket_backend/service/TournamentService.java
 package com.example.cricket_backend.service;
 
 import java.util.List;
@@ -26,15 +27,15 @@ public class TournamentService {
     public Optional<Tournament> getTournamentById(Long id){
         return tournamentRepository.findById(id);
     }
-    
+
     public void deleteTournament(Long id){
         tournamentRepository.deleteById(id);
     }
 
-    public void updateTournament(Long id,Tournament tournament){
+    public void updateTournament(Long id, Tournament tournament){
         if(tournamentRepository.existsById(id)){
+            tournament.setId(id);
             tournamentRepository.save(tournament);
         }
     }
-
 }
