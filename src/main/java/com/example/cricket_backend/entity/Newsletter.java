@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="newsletters")
-public class Newsletter {
+public class NewsLetter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class Newsletter {
     @Column(length = 2000)
     private String content;
 
-    public Newsletter() {}
+    public NewsLetter() {}
 
     public Long getId() {
         return id;

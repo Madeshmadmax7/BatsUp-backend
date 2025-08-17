@@ -12,7 +12,6 @@ public class Team {
     @Column(unique=true, nullable=false)
     private String name;
 
-    // Password in hashed form ideally
     @Column(nullable=false)
     private String password;
 
@@ -23,7 +22,7 @@ public class Team {
     private Set<Tournament> tournaments = new HashSet<>();
 
     @OneToOne(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Newsletter newsletter;
+    private NewsLetter newsletter;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private Set<ScoreCard> scoreCards = new HashSet<>();
@@ -70,11 +69,11 @@ public class Team {
         this.tournaments = tournaments;
     }
 
-    public Newsletter getNewsletter() {
+    public NewsLetter getNewsletter() {
         return newsletter;
     }
 
-    public void setNewsletter(Newsletter newsletter) {
+    public void setNewsletter(NewsLetter newsletter) {
         this.newsletter = newsletter;
     }
 

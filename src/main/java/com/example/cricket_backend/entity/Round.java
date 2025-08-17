@@ -1,7 +1,6 @@
 package com.example.cricket_backend.entity;
 
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "rounds")
