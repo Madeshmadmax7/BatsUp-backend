@@ -1,4 +1,4 @@
-package com.example.cricket_backend.model;
+package com.example.cricket_backend.entity;
 
 public enum Role {
     USER,

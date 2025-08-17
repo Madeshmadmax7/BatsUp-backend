@@ -1,0 +1,90 @@
+package com.example.cricket_backend.entity;
+
+import jakarta.persistence.*;
+import java.util.*;
+
+@Entity
+@Table(name = "teams")
+public class Team {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique=true, nullable=false)
+    private String name;
+
+    // Password in hashed form ideally
+    @Column(nullable=false)
+    private String password;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<Player> players = new HashSet<>();
+
+    @ManyToMany(mappedBy = "teams")
+    private Set<Tournament> tournaments = new HashSet<>();
+
+    @OneToOne(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Newsletter newsletter;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<ScoreCard> scoreCards = new HashSet<>();
+
+    public Team() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<Player> players) {
+        this.players = players;
+    }
+
+    public Set<Tournament> getTournaments() {
+        return tournaments;
+    }
+
+    public void setTournaments(Set<Tournament> tournaments) {
+        this.tournaments = tournaments;
+    }
+
+    public Newsletter getNewsletter() {
+        return newsletter;
+    }
+
+    public void setNewsletter(Newsletter newsletter) {
+        this.newsletter = newsletter;
+    }
+
+    public Set<ScoreCard> getScoreCards() {
+        return scoreCards;
+    }
+
+    public void setScoreCards(Set<ScoreCard> scoreCards) {
+        this.scoreCards = scoreCards;
+    }
+
+    // Getters and setters...
+}
