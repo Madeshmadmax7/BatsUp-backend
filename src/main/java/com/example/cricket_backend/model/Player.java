@@ -33,6 +33,10 @@ public class Player {
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToMany
     @JoinTable(name = "player_matches", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "match_id"))
     private List<Match> matches;
@@ -164,4 +168,13 @@ public class Player {
     public void setMatches(List<Match> matches) {
         this.matches = matches;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
 }

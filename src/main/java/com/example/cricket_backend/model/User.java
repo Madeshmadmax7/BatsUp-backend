@@ -13,6 +13,12 @@ public class User {
     private String password;
     private String role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Player player;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Fan fan;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -27,4 +33,18 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public Player getPlayer() {
+        return player;
+    }
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+    public Fan getFan() {
+        return fan;
+    }
+    public void setFan(Fan fan) {
+        this.fan = fan;
+    }
+
+    
 }

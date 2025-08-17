@@ -16,6 +16,10 @@ public class Fan {
     @ManyToMany(mappedBy = "fans")
     private List<Match> bookedMatches;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToMany
     @JoinTable(
         name = "fan_followed_teams",
@@ -34,4 +38,11 @@ public class Fan {
     public void setBookedMatches(List<Match> bookedMatches) { this.bookedMatches = bookedMatches; }
     public List<Team> getFollowedTeams() { return followedTeams; }
     public void setFollowedTeams(List<Team> followedTeams) { this.followedTeams = followedTeams; }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
 }

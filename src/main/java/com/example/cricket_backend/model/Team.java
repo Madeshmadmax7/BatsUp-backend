@@ -1,4 +1,3 @@
-// com/example/cricket_backend/model/Team.java
 package com.example.cricket_backend.model;
 
 import jakarta.persistence.*;

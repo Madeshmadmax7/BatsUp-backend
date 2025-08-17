@@ -1,24 +1,27 @@
 package com.example.cricket_backend.controller;
 
+import com.example.cricket_backend.dto.RegisterRequestDTO;
+import com.example.cricket_backend.dto.LoginRequestDTO;
+import com.example.cricket_backend.model.User;
+import com.example.cricket_backend.model.Player;
+import com.example.cricket_backend.model.Fan;
+import com.example.cricket_backend.repository.UserRepository;
+import com.example.cricket_backend.repository.PlayerRepository;
+import com.example.cricket_backend.repository.FanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.cricket_backend.dto.LoginRequestDTO;
-import com.example.cricket_backend.dto.RegisterRequestDTO;
-import com.example.cricket_backend.dto.UserResponseDTO;
-import com.example.cricket_backend.model.*;
-import com.example.cricket_backend.service.UserService;
-
 @RestController
-@RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:3000")
-public class UserController {
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
+public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    @Autowired private UserRepository userRepository;
+    @Autowired private PlayerRepository playerRepository;
+    @Autowired private FanRepository fanRepository;
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequestDTO dto) {
+    public User register(@RequestBody RegisterRequestDTO dto) {
         User user = new User();
         user.setUserName(dto.getUsername());
         user.setEmail(dto.getEmail());
@@ -39,20 +42,18 @@ public class UserController {
         } else if ("FAN".equalsIgnoreCase(dto.getRole())) {
             Fan fan = new Fan();
             fan.setName(dto.getName());
+            fan.setEmail(dto.getEmail());
 
             fan.setUser(user);
             user.setFan(fan);
         }
 
-        userService.createUser(user);
-        return "Registration successful!";
+        return userRepository.save(user);
     }
 
     @PostMapping("/login")
-    public UserResponseDTO login(@RequestBody LoginRequestDTO dto) {
-        return userService.findByUsername(dto.getUsername())
-                .filter(u -> u.getPassword().equals(dto.getPassword()))
-                .map(u -> new UserResponseDTO(u.getId(), u.getUserName(), u.getEmail(), u.getRole()))
+    public User login(@RequestBody LoginRequestDTO dto) {
+        return userRepository.findByUserNameAndPassword(dto.getUsername(), dto.getPassword())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
     }
 }
