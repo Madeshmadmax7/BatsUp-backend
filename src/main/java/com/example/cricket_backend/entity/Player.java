@@ -6,7 +6,8 @@ import java.util.*;
 @Entity
 @Table(name = "players")
 public class Player {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nickname;
@@ -72,7 +73,5 @@ public class Player {
     public void setScoreCards(Set<ScoreCard> scoreCards) {
         this.scoreCards = scoreCards;
     }
-
-    // Getters and setters...
     
 }

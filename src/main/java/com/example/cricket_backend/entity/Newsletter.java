@@ -20,9 +20,9 @@ public class NewsLetter {
 
     @ManyToMany
     @JoinTable(
-      name = "newsletter_fans",
-      joinColumns = @JoinColumn(name = "newsletter_id"),
-      inverseJoinColumns = @JoinColumn(name = "fan_id"))
+        name = "newsletter_fans",
+        joinColumns = @JoinColumn(name = "newsletter_id"),
+        inverseJoinColumns = @JoinColumn(name = "fan_id"))
     private Set<Fan> fans;
 
     @Column(length = 2000)
@@ -70,5 +70,4 @@ public class NewsLetter {
         this.content = content;
     }
 
-    // Getters and setters...
 }

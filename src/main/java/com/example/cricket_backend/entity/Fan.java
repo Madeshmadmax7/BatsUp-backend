@@ -82,6 +82,6 @@ public class Fan {
         this.followedTournaments = followedTournaments;
     }
 
-    // Getters and setters...
+    
     
 }

@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "rounds")
 public class Round {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private int roundNumber;
