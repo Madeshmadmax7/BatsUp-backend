@@ -43,7 +43,7 @@ public class ScoreCard {
     }
 
     public int getWickets() {
-        return wickets;
+        return wickets; 
     }
 
     public void setWickets(int wickets) {

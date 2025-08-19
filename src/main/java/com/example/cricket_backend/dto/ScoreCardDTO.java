@@ -7,9 +7,24 @@ public class ScoreCardDTO {
     private int catches;
     private Long playerId;
     private Long teamId;
+    private String playerName;
+    private String teamName;
     private Long roundId;
+    
     public Long getId() {
         return id;
+    }
+    public String getPlayerName() {
+        return playerName;
+    }
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+    public String getTeamName() {
+        return teamName;
+    }
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
     public void setId(Long id) {
         this.id = id;

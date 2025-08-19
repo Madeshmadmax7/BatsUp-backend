@@ -7,4 +7,5 @@ import com.example.cricket_backend.entity.Team;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     Optional<Player> findByNicknameAndTeam(String nickname, Team team);
+    Optional<Player> findByNicknameAndTeamAndUserIsNull(String nickname, Team team);
 }

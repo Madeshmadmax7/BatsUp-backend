@@ -42,6 +42,29 @@ public class PlayerService {
         return PlayerMapper.toDTO(player);
     }
 
+
+    public PlayerDTO registerOrUpdatePlayer(PlayerDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Team team = teamRepository.findByNameAndPassword(dto.getTeamName(), dto.getTeamPassword())
+                .orElseThrow(() -> new RuntimeException("Invalid team credentials"));
+
+        Player player = playerRepository.findByNicknameAndTeam(dto.getNickname(), team)
+                .orElse(new Player());
+
+        player.setNickname(dto.getNickname());
+        player.setCity(dto.getCity());
+        player.setPhone(dto.getPhone());
+        player.setPlayerType(dto.getPlayerType());
+        player.setUser(user);
+        player.setTeam(team);
+
+        playerRepository.save(player);
+
+        return dto;
+    }
+
     @Transactional
     public PlayerDTO createPlayerWithoutUser(PlayerDTO playerDTO) {
         Player player = new Player();
@@ -118,46 +141,36 @@ public class PlayerService {
         return TeamMapper.toDTO(team);
     }
 
-    @Transactional
-public PlayerDTO registerOrUpdatePlayer(String playerName, String playerCity, String phone, String playerType,
-                                        Long userId, String teamName, String teamPassword) {
+    public PlayerDTO registerPlayer(Long playerId, Long userId, PlayerDTO dto) {
+        Player player = playerRepository.findById(playerId)
+                .orElseThrow(() -> new RuntimeException("Player not found"));
 
-    Team team = teamRepository.findByName(teamName)
-            .orElseThrow(() -> new RuntimeException("Team not found"));
+        // Update all fields from DTO if provided
+        player.setNickname(dto.getNickname());
+        player.setTeamName(dto.getTeamName());
+        player.setJerseyNumber(dto.getJerseyNumber());
+        player.setCity(dto.getCity());
+        player.setPhone(dto.getPhone());
+        player.setPlayerType(dto.getPlayerType());
 
-    if (!team.getPassword().equals(teamPassword))
-        throw new RuntimeException("Incorrect team password");
-
-    Optional<Player> existingPlayerOpt = playerRepository.findByNicknameAndTeam(playerName, team);
-
-    Player player;
-    if (existingPlayerOpt.isPresent()) {
-        player = existingPlayerOpt.get();
-        // Update only if new values are non-null or different
-        if (player.getCity() == null || !player.getCity().equals(playerCity)) {
-            player.setCity(playerCity);
+        // Set user
+        if (userId != null) {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            player.setUser(user);
         }
-        if (player.getPhone() == null || !player.getPhone().equals(phone)) {
-            player.setPhone(phone);
+
+        // Set team
+        if (dto.getTeamId() != null) {
+            Team team = teamRepository.findById(dto.getTeamId())
+                    .orElseThrow(() -> new RuntimeException("Team not found"));
+            player.setTeam(team);
         }
-        if (player.getPlayerType() == null || !player.getPlayerType().equals(playerType)) {
-            player.setPlayerType(playerType);
-        }
-        player.setUser(userRepository.findById(userId).orElseThrow());
-    } else {
-        player = new Player();
-        player.setNickname(playerName);
-        player.setCity(playerCity);
-        player.setPhone(phone);
-        player.setPlayerType(playerType);
-        player.setUser(userRepository.findById(userId).orElseThrow());
-        player.setTeam(team);
+
+        Player saved = playerRepository.save(player);
+        return PlayerMapper.toDTO(saved);
     }
 
-    playerRepository.save(player);
-
-    return PlayerMapper.toDTO(player);
-}
 
 
 }

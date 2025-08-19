@@ -1,15 +1,19 @@
 package com.example.cricket_backend.mapper;
 
+import java.util.stream.Collectors;
 import com.example.cricket_backend.dto.TournamentDTO;
 import com.example.cricket_backend.entity.Tournament;
-import java.util.stream.Collectors;
+import com.example.cricket_backend.entity.Team;
+import com.example.cricket_backend.entity.Round;
 
 public class TournamentMapper {
 
     public static TournamentDTO toDTO(Tournament tournament) {
         TournamentDTO dto = new TournamentDTO();
         dto.setId(tournament.getId());
+
         dto.setTournamentName(tournament.getName());
+
         dto.setLocation(tournament.getLocation());
         dto.setStartDate(tournament.getStartDate());
         dto.setEndDate(tournament.getEndDate());
@@ -19,18 +23,29 @@ public class TournamentMapper {
 
         dto.setTeamIds(
             tournament.getTeams().stream()
-                .map(team -> team.getId())
+                .map(Team::getId)
                 .collect(Collectors.toSet())
+        );
+
+        dto.setTeamNames(
+            tournament.getTeams().stream()
+                .map(Team::getName)
+                .collect(Collectors.toList())
         );
 
         dto.setRoundIds(
             tournament.getRounds().stream()
-                .map(round -> round.getId())
+                .map(Round::getId)
                 .collect(Collectors.toSet())
         );
 
+        dto.setTeams(
+            tournament.getTeams().stream()
+                .map(TeamMapper::toDTO)
+                .collect(Collectors.toList())
+        );
+
+
         return dto;
     }
-
-    
 }

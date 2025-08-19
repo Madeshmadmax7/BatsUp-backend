@@ -1,12 +1,11 @@
 package com.example.cricket_backend.dto;
 
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 public class TournamentDTO {
 
     private Long id;
-    private String tournamentName;  // matches frontend key
+    private String tournamentName;
     private String location;
     private Date startDate;
     private Date endDate;
@@ -15,8 +14,12 @@ public class TournamentDTO {
     private String image;
     private Set<Long> teamIds;
     private Set<Long> roundIds;
+    
+    private List<String> teamNames;
+    private List<TeamDTO> teams;
 
-    // Getters and setters
+    public List<TeamDTO> getTeams() { return teams; }
+    public void setTeams(List<TeamDTO> teams) { this.teams = teams; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -47,4 +50,10 @@ public class TournamentDTO {
 
     public Set<Long> getRoundIds() { return roundIds; }
     public void setRoundIds(Set<Long> roundIds) { this.roundIds = roundIds; }
+    public List<String> getTeamNames() {
+        return teamNames;
+    }
+    public void setTeamNames(List<String> teamNames) {
+        this.teamNames = teamNames;
+    }
 }

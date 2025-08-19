@@ -30,13 +30,11 @@ public class ScoreCardController {
         return scoreCardService.getAllScoreCards();
     }
 
-    // UPDATE
     @PutMapping("/{id}")
     public ScoreCardDTO updateScoreCard(@PathVariable Long id, @RequestBody ScoreCardDTO dto) {
         return scoreCardService.updateScoreCard(id, dto);
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     public void deleteScoreCard(@PathVariable Long id) {
         scoreCardService.deleteScoreCard(id);

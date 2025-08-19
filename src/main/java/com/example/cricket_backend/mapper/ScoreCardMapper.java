@@ -4,15 +4,28 @@ import com.example.cricket_backend.dto.ScoreCardDTO;
 import com.example.cricket_backend.entity.ScoreCard;
 
 public class ScoreCardMapper {
+
     public static ScoreCardDTO toDTO(ScoreCard scoreCard) {
         ScoreCardDTO dto = new ScoreCardDTO();
         dto.setId(scoreCard.getId());
         dto.setRuns(scoreCard.getRuns());
         dto.setWickets(scoreCard.getWickets());
         dto.setCatches(scoreCard.getCatches());
-        dto.setPlayerId(scoreCard.getPlayer() != null ? scoreCard.getPlayer().getId() : null);
-        dto.setTeamId(scoreCard.getTeam() != null ? scoreCard.getTeam().getId() : null);
-        dto.setRoundId(scoreCard.getRound() != null ? scoreCard.getRound().getId() : null);
+
+        if (scoreCard.getPlayer() != null) {
+            dto.setPlayerId(scoreCard.getPlayer().getId());
+            dto.setPlayerName(scoreCard.getPlayer().getNickname());
+        }
+
+        if (scoreCard.getTeam() != null) {
+            dto.setTeamId(scoreCard.getTeam().getId());
+            dto.setTeamName(scoreCard.getTeam().getName());
+        }
+
+        if (scoreCard.getRound() != null) {
+            dto.setRoundId(scoreCard.getRound().getId());
+        }
+
         return dto;
     }
 }

@@ -38,17 +38,18 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
-    @PostMapping("/registerOrUpdate")
-    public PlayerDTO registerOrUpdatePlayer(@RequestParam Long userId,
-            @RequestParam String playerName,
-            @RequestParam String playerCity,
-            @RequestParam String phone,
-            @RequestParam String playerType,
-            @RequestParam String teamName,
-            @RequestParam String teamPassword) {
 
-        return playerService.registerOrUpdatePlayer(playerName, playerCity, phone, playerType, userId, teamName,
-                teamPassword);
+    @PutMapping("/{playerId}/register")
+    public PlayerDTO registerPlayer(
+            @PathVariable Long playerId,
+            @RequestParam Long userId,
+            @RequestBody PlayerDTO dto) {
+        return playerService.registerPlayer(playerId, userId, dto);
+}
+
+    @PostMapping("/registerOrUpdate")
+    public PlayerDTO registerOrUpdatePlayer(@RequestBody PlayerDTO dto) {
+        return playerService.registerOrUpdatePlayer(dto);
     }
 
     @GetMapping("/all")
