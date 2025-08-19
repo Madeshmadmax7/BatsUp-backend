@@ -12,7 +12,7 @@ public class PlayerDTO {
     private String playerType;
     private String teamPassword;
 
-    // Getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -40,6 +40,6 @@ public class PlayerDTO {
     public String getPlayerType() { return playerType; }
     public void setPlayerType(String playerType) { this.playerType = playerType; }
 
-    public String getTeamPassword() { return teamPassword; }  // ✅ Added
-    public void setTeamPassword(String teamPassword) { this.teamPassword = teamPassword; }  // ✅ Added
+    public String getTeamPassword() { return teamPassword; }
+    public void setTeamPassword(String teamPassword) { this.teamPassword = teamPassword; }
 }

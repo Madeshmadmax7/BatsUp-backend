@@ -23,9 +23,12 @@ import java.util.stream.Collectors;
 @Service
 public class PlayerService {
 
-    @Autowired private PlayerRepository playerRepository;
-    @Autowired private TeamRepository teamRepository;
-    @Autowired private UserRepository userRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
+    @Autowired
+    private TeamRepository teamRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public PlayerDTO createPlayer(Long userId, PlayerDTO playerDTO) {
@@ -42,27 +45,44 @@ public class PlayerService {
         return PlayerMapper.toDTO(player);
     }
 
+    public PlayerDTO registerOrUpdatePlayer(PlayerDTO playerDTO) {
+        // 1. Validate team name + password
+        Team team = teamRepository.findByNameAndPassword(
+                playerDTO.getTeamName(), playerDTO.getTeamPassword())
+                .orElseThrow(() -> new RuntimeException("Invalid team name or password"));
 
-    public PlayerDTO registerOrUpdatePlayer(PlayerDTO dto) {
-        User user = userRepository.findById(dto.getUserId())
+        // 2. Check if captain already created slot with this nickname
+        Optional<Player> existingSlotOpt = playerRepository.findByNicknameAndTeamAndUserIsNull(
+                playerDTO.getNickname(), team);
+
+        Player player;
+        if (existingSlotOpt.isPresent()) {
+            // Case A: Slot exists → attach user
+            player = existingSlotOpt.get();
+        } else {
+            // Case B: No slot → check team size
+            long playerCount = playerRepository.countByTeam(team);
+            if (playerCount >= 15) {
+                throw new RuntimeException("Team already has 15 players, cannot add more.");
+            }
+
+            // Create a new player entry
+            player = new Player();
+            player.setNickname(playerDTO.getNickname());
+            player.setJerseyNumber(playerDTO.getJerseyNumber());
+            player.setTeam(team);
+        }
+
+        User user = userRepository.findById(playerDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Team team = teamRepository.findByNameAndPassword(dto.getTeamName(), dto.getTeamPassword())
-                .orElseThrow(() -> new RuntimeException("Invalid team credentials"));
-
-        Player player = playerRepository.findByNicknameAndTeam(dto.getNickname(), team)
-                .orElse(new Player());
-
-        player.setNickname(dto.getNickname());
-        player.setCity(dto.getCity());
-        player.setPhone(dto.getPhone());
-        player.setPlayerType(dto.getPlayerType());
         player.setUser(user);
-        player.setTeam(team);
+        player.setCity(playerDTO.getCity());
+        player.setPhone(playerDTO.getPhone());
+        player.setPlayerType(playerDTO.getPlayerType());
 
-        playerRepository.save(player);
-
-        return dto;
+        Player saved = playerRepository.save(player);
+        return PlayerMapper.toDTO(saved);
     }
 
     @Transactional
@@ -77,7 +97,6 @@ public class PlayerService {
         playerRepository.save(player);
         return PlayerMapper.toDTO(player);
     }
-
 
     @Transactional
     public PlayerDTO updatePlayerUser(Long playerId, Long userId) {
@@ -117,8 +136,10 @@ public class PlayerService {
     public PlayerDTO joinTeam(Long playerId, Long teamId, String teamPassword) {
         Player player = playerRepository.findById(playerId).orElseThrow();
         Team team = teamRepository.findById(teamId).orElseThrow();
-        if (!team.getPassword().equals(teamPassword)) throw new RuntimeException("Team password incorrect");
-        if (team.getPlayers().size() >= 15) throw new RuntimeException("Team is full");
+        if (!team.getPassword().equals(teamPassword))
+            throw new RuntimeException("Team password incorrect");
+        if (team.getPlayers().size() >= 15)
+            throw new RuntimeException("Team is full");
         player.setTeam(team);
         playerRepository.save(player);
         return PlayerMapper.toDTO(player);
@@ -131,7 +152,8 @@ public class PlayerService {
         team.setPassword(password);
 
         for (Long pid : playerIds) {
-            if (team.getPlayers().size() >= 15) break;
+            if (team.getPlayers().size() >= 15)
+                break;
             Player player = playerRepository.findById(pid).orElseThrow();
             player.setTeam(team);
             team.getPlayers().add(player);
@@ -170,7 +192,5 @@ public class PlayerService {
         Player saved = playerRepository.save(player);
         return PlayerMapper.toDTO(saved);
     }
-
-
 
 }

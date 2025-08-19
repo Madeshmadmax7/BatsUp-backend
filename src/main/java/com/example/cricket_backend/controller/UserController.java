@@ -1,11 +1,12 @@
 package com.example.cricket_backend.controller;
 
-import com.example.cricket_backend.dto.*;
-import com.example.cricket_backend.service.*;
+import com.example.cricket_backend.dto.UserDTO;
+import com.example.cricket_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -15,13 +16,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public UserDTO register(@RequestBody UserDTO dto, @RequestParam String password) {
-        return userService.register(dto, password);
+    public ResponseEntity<?> register(@RequestBody UserDTO dto) {
+        try {
+            UserDTO savedUser = userService.register(dto);
+            return ResponseEntity.ok(savedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PostMapping("/login")
-    public UserDTO login(@RequestParam String email, @RequestParam String password) {
-        return userService.login(email, password)
+    public UserDTO login(@RequestBody UserDTO dto) {
+        return userService.login(dto.getEmail(), dto.getPassword())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
     }
 

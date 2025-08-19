@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface TeamRepository extends JpaRepository<Team, Long> {
     Optional<Team> findByNameAndPassword(String name, String password);
     Optional<Team> findByName(String name);
+    
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,16 +21,16 @@ public class UserService {
     @Autowired private UserRepository userRepository;
     @Autowired private PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public UserDTO register(UserDTO userDTO, String password) {
-        User user = new User();
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(password));
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setRoles(userDTO.getRoles());
-        userRepository.save(user);
-        return UserMapper.toDTO(user);
+    public UserDTO register(UserDTO dto) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("User with email '" + dto.getEmail() + "' already exists");
+        }
+
+        User user = UserMapper.fromDTO(dto);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        User saved = userRepository.save(user);
+        return UserMapper.toDTO(saved);
     }
 
     public Optional<UserDTO> login(String email, String password) {
@@ -53,11 +54,13 @@ public class UserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User user = userRepository.findById(id).orElseThrow();
         user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setRoles(userDTO.getRoles());
+        if (userDTO.getRoles() != null) {
+            user.setRoles(new HashSet<>(userDTO.getRoles()));
+        }
         userRepository.save(user);
         return UserMapper.toDTO(user);
     }
+
 
     @Transactional
     public void deleteUser(Long id) {

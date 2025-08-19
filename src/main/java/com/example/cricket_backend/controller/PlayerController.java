@@ -5,6 +5,7 @@ import com.example.cricket_backend.dto.TeamDTO;
 import com.example.cricket_backend.service.PlayerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,10 +48,12 @@ public class PlayerController {
         return playerService.registerPlayer(playerId, userId, dto);
 }
 
-    @PostMapping("/registerOrUpdate")
-    public PlayerDTO registerOrUpdatePlayer(@RequestBody PlayerDTO dto) {
-        return playerService.registerOrUpdatePlayer(dto);
+    @PostMapping("/register")
+    public ResponseEntity<PlayerDTO> registerOrUpdate(@RequestBody PlayerDTO dto) {
+        PlayerDTO saved = playerService.registerOrUpdatePlayer(dto); // <-- expects PlayerDTO
+        return ResponseEntity.ok(saved);
     }
+
 
     @GetMapping("/all")
     public List<PlayerDTO> getAllPlayers() {
