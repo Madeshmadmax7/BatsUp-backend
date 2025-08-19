@@ -5,7 +5,7 @@ import com.example.cricket_backend.entity.*;
 import com.example.cricket_backend.mapper.*;
 import com.example.cricket_backend.repository.*;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +25,22 @@ public class TeamService {
     public TeamDTO createTeam(TeamDTO dto) {
         Team team = new Team();
         team.setName(dto.getName());
-        // password logic should come separately
+        team.setPassword(dto.getPassword());
+
+        if (dto.getPlayerIds() != null && !dto.getPlayerIds().isEmpty()) {
+            Set<Player> players = dto.getPlayerIds().stream()
+                .map(pid -> playerRepository.findById(pid).orElseThrow())
+                .collect(Collectors.toSet());
+            for (Player p : players) {
+                p.setTeam(team);
+            }
+            team.setPlayers(players);
+        }
+
         teamRepository.save(team);
         return TeamMapper.toDTO(team);
     }
+
 
     public TeamDTO getTeamById(Long id) {
         Team team = teamRepository.findById(id).orElseThrow();

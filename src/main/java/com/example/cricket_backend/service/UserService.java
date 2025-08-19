@@ -1,16 +1,18 @@
 package com.example.cricket_backend.service;
 
-import com.example.cricket_backend.dto.*;
-import com.example.cricket_backend.entity.*;
-import com.example.cricket_backend.mapper.*;
-import com.example.cricket_backend.repository.*;
+import com.example.cricket_backend.dto.UserDTO;
+import com.example.cricket_backend.entity.User;
+import com.example.cricket_backend.mapper.UserMapper;
+import com.example.cricket_backend.repository.UserRepository;
+
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
