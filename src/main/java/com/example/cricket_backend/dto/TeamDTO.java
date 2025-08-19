@@ -8,36 +8,16 @@ public class TeamDTO {
     private String password;
     private Set<Long> playerIds;
     private Set<Long> tournamentIds;
-    
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public Set<Long> getPlayerIds() {
-        return playerIds;
-    }
-    public void setPlayerIds(Set<Long> playerIds) {
-        this.playerIds = playerIds;
-    }
-    public Set<Long> getTournamentIds() {
-        return tournamentIds;
-    }
-    public void setTournamentIds(Set<Long> tournamentIds) {
-        this.tournamentIds = tournamentIds;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
+
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public Set<Long> getPlayerIds() { return playerIds; }
+    public void setPlayerIds(Set<Long> playerIds) { this.playerIds = playerIds; }
+    public Set<Long> getTournamentIds() { return tournamentIds; }
+    public void setTournamentIds(Set<Long> tournamentIds) { this.tournamentIds = tournamentIds; }
 }

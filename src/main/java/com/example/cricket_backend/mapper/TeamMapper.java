@@ -9,16 +9,13 @@ public class TeamMapper {
         TeamDTO dto = new TeamDTO();
         dto.setId(team.getId());
         dto.setName(team.getName());
-        dto.setPlayerIds(
-            team.getPlayers() != null ?
-            team.getPlayers().stream().map(p -> p.getId()).collect(Collectors.toSet())
-            : null
-        );
-        dto.setTournamentIds(
-            team.getTournaments() != null ?
-            team.getTournaments().stream().map(t -> t.getId()).collect(Collectors.toSet())
-            : null
-        );
+        dto.setPassword(team.getPassword());
+        if(team.getPlayers() != null) {
+            dto.setPlayerIds(team.getPlayers().stream().map(p -> p.getId()).collect(Collectors.toSet()));
+        }
+        if(team.getTournaments() != null) {
+            dto.setTournamentIds(team.getTournaments().stream().map(t -> t.getId()).collect(Collectors.toSet()));
+        }
         return dto;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TournamentService {
@@ -20,12 +21,29 @@ public class TournamentService {
     @Autowired private NewsLetterRepository newsletterRepository;
 
     @Transactional
-    public TournamentDTO createTournament(TournamentDTO tournamentDTO) {
+    public TournamentDTO createTournament(TournamentDTO dto) {
         Tournament tournament = new Tournament();
-        tournament.setName(tournamentDTO.getName());
-        tournament.setLocation(tournamentDTO.getLocation());
-        tournament.setStartDate(tournamentDTO.getStartDate());
-        tournament.setEndDate(tournamentDTO.getEndDate());
+        tournament.setName(dto.getTournamentName());
+        tournament.setLocation(dto.getLocation());
+        tournament.setStartDate(dto.getStartDate());
+        tournament.setEndDate(dto.getEndDate());
+        tournament.setMatchType(dto.getMatchType());
+        tournament.setDescription(dto.getDescription());
+        tournament.setImage(dto.getImage());
+        tournamentRepository.save(tournament);
+        return TournamentMapper.toDTO(tournament);
+    }
+
+    @Transactional
+    public TournamentDTO updateTournament(Long id, TournamentDTO dto) {
+        Tournament tournament = tournamentRepository.findById(id).orElseThrow();
+        tournament.setName(dto.getTournamentName());
+        tournament.setLocation(dto.getLocation());
+        tournament.setStartDate(dto.getStartDate());
+        tournament.setEndDate(dto.getEndDate());
+        tournament.setMatchType(dto.getMatchType());           // <-- Add this
+        tournament.setDescription(dto.getDescription());       // <-- Add this
+        tournament.setImage(dto.getImage());                     // <-- Add this
         tournamentRepository.save(tournament);
         return TournamentMapper.toDTO(tournament);
     }
@@ -41,17 +59,25 @@ public class TournamentService {
                 .collect(Collectors.toList());
     }
 
+
     @Transactional
-    public TournamentDTO updateTournament(Long id, TournamentDTO dto) {
-        Tournament tournament = tournamentRepository.findById(id).orElseThrow();
-        tournament.setName(dto.getName());
-        tournament.setLocation(dto.getLocation());
-        tournament.setStartDate(dto.getStartDate());
-        tournament.setEndDate(dto.getEndDate());
+    public TournamentDTO removeTeamFromTournament(Long tournamentId, Long teamId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+            .orElseThrow(() -> new RuntimeException("Tournament not found: " + tournamentId));
+        Team team = teamRepository.findById(teamId)
+            .orElseThrow(() -> new RuntimeException("Team not found: " + teamId));
+        
+        tournament.getTeams().remove(team);
+        team.getTournaments().remove(tournament);
+
         tournamentRepository.save(tournament);
+        teamRepository.save(team);
+
+        if (team.getTournaments().isEmpty()) {
+            teamRepository.delete(team);
+        }
         return TournamentMapper.toDTO(tournament);
     }
-
     @Transactional
     public void deleteTournament(Long id) {
         tournamentRepository.deleteById(id);
@@ -74,5 +100,22 @@ public class TournamentService {
         newsletter.setContent(content);
         newsletterRepository.save(newsletter);
         return NewsLetterMapper.toDTO(newsletter);
+    }
+
+    // --- Extra methods needed by frontend ---
+
+    public List<TeamDTO> getTeamsForTournament(Long tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
+        return tournament.getTeams().stream()
+                .map(TeamMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ScoreCardDTO> getScoreCardsForTournament(Long tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
+        return tournament.getRounds().stream()
+                .flatMap(round -> round.getScoreCard() != null ? Stream.of(round.getScoreCard()) : Stream.empty())
+                .map(ScoreCardMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

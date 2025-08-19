@@ -1,7 +1,9 @@
 package com.example.cricket_backend.controller;
 
-import com.example.cricket_backend.dto.*;
-import com.example.cricket_backend.service.*;
+import com.example.cricket_backend.dto.PlayerDTO;
+import com.example.cricket_backend.dto.TeamDTO;
+import com.example.cricket_backend.service.PlayerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +12,9 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/player")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PlayerController {
+
     @Autowired
     private PlayerService playerService;
 
@@ -19,9 +23,32 @@ public class PlayerController {
         return playerService.createPlayer(userId, dto);
     }
 
+    @PostMapping("/createNoUser")
+    public PlayerDTO createPlayerWithoutUser(@RequestBody PlayerDTO dto) {
+        return playerService.createPlayerWithoutUser(dto);
+    }
+
+    @PutMapping("/{playerId}/set-user")
+    public PlayerDTO setUser(@PathVariable Long playerId, @RequestParam Long userId) {
+        return playerService.updatePlayerUser(playerId, userId);
+    }
+
     @GetMapping("/{id}")
     public PlayerDTO getPlayer(@PathVariable Long id) {
         return playerService.getPlayerById(id);
+    }
+
+    @PostMapping("/registerOrUpdate")
+    public PlayerDTO registerOrUpdatePlayer(@RequestParam Long userId,
+            @RequestParam String playerName,
+            @RequestParam String playerCity,
+            @RequestParam String phone,
+            @RequestParam String playerType,
+            @RequestParam String teamName,
+            @RequestParam String teamPassword) {
+
+        return playerService.registerOrUpdatePlayer(playerName, playerCity, phone, playerType, userId, teamName,
+                teamPassword);
     }
 
     @GetMapping("/all")
@@ -29,7 +56,12 @@ public class PlayerController {
         return playerService.getAllPlayers();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{playerId}/setUser")
+    public PlayerDTO updatePlayerUser(@PathVariable Long playerId, @RequestParam Long userId) {
+        return playerService.updatePlayerUser(playerId, userId);
+    }
+
+    @PutMapping("/update/{id}")
     public PlayerDTO updatePlayer(@PathVariable Long id, @RequestBody PlayerDTO dto) {
         return playerService.updatePlayer(id, dto);
     }
@@ -39,9 +71,8 @@ public class PlayerController {
         playerService.deletePlayer(id);
     }
 
-    @PostMapping("/{playerId}/join-team")
-    public PlayerDTO joinTeam(@PathVariable Long playerId,
-            @RequestParam Long teamId,
+    @PostMapping("/{playerId}/joinTeam")
+    public PlayerDTO joinTeam(@PathVariable Long playerId, @RequestParam Long teamId,
             @RequestParam String teamPassword) {
         return playerService.joinTeam(playerId, teamId, teamPassword);
     }

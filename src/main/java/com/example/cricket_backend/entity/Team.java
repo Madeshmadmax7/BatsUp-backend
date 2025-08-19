@@ -1,21 +1,24 @@
 package com.example.cricket_backend.entity;
 
 import jakarta.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "teams")
 public class Team {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true, nullable=false)
+    @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Player> players = new HashSet<>();
 
     @ManyToMany(mappedBy = "teams")
@@ -24,10 +27,11 @@ public class Team {
     @OneToOne(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private NewsLetter newsletter;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScoreCard> scoreCards = new HashSet<>();
 
     public Team() {}
+
 
     public Long getId() {
         return id;
@@ -84,6 +88,4 @@ public class Team {
     public void setScoreCards(Set<ScoreCard> scoreCards) {
         this.scoreCards = scoreCards;
     }
-
-    // Getters and setters...
 }

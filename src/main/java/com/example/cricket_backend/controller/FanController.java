@@ -10,6 +10,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/fan")
+@CrossOrigin(origins = "http://localhost:5173")
 public class FanController {
     @Autowired private FanService fanService;
 

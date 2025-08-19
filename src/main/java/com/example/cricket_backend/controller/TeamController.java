@@ -1,15 +1,17 @@
 package com.example.cricket_backend.controller;
 
-import com.example.cricket_backend.dto.*;
-import com.example.cricket_backend.service.*;
-
-import java.util.List;
+import com.example.cricket_backend.dto.NewsLetterDTO;
+import com.example.cricket_backend.dto.TeamDTO;
+import com.example.cricket_backend.service.TeamService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/team")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TeamController {
     @Autowired private TeamService teamService;
 
@@ -38,7 +40,7 @@ public class TeamController {
         teamService.deleteTeam(id);
     }
 
-    @PostMapping("/{teamId}/add-player/{playerId}")
+    @PostMapping("/{teamId}/addPlayer/{playerId}")
     public TeamDTO addPlayer(@PathVariable Long teamId, @PathVariable Long playerId) {
         return teamService.addPlayerToTeam(teamId, playerId);
     }
