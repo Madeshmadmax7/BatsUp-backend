@@ -1,37 +1,26 @@
-package com.example.cricket_backend.entity;
+package com.example.cricket_backend.dto;
 
-import jakarta.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "matches")
-public class Match {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MatchDTO {
     private Long id;
+    private Long roundId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "round_id")
-    private Round round;
-
-    // Store team ids & names (denormalized, simple)
     private Long teamOneId;
     private String teamOneName;
 
     private Long teamTwoId;
     private String teamTwoName;
 
-    private String status; // SCHEDULED, COMPLETED, TBD
+    private String status;
 
-    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ScoreCard> scoreCards = new ArrayList<>();
+    private List<ScoreCardDTO> scoreCards;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Round getRound() { return round; }
-    public void setRound(Round round) { this.round = round; }
+    public Long getRoundId() { return roundId; }
+    public void setRoundId(Long roundId) { this.roundId = roundId; }
 
     public Long getTeamOneId() { return teamOneId; }
     public void setTeamOneId(Long teamOneId) { this.teamOneId = teamOneId; }
@@ -48,6 +37,6 @@ public class Match {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public List<ScoreCard> getScoreCards() { return scoreCards; }
-    public void setScoreCards(List<ScoreCard> scoreCards) { this.scoreCards = scoreCards; }
+    public List<ScoreCardDTO> getScoreCards() { return scoreCards; }
+    public void setScoreCards(List<ScoreCardDTO> scoreCards) { this.scoreCards = scoreCards; }
 }

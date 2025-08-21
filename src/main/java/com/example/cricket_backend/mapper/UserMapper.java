@@ -5,13 +5,11 @@ import com.example.cricket_backend.entity.User;
 
 import java.util.HashSet;
 import java.util.stream.Collectors;
-
 public class UserMapper {
     public static UserDTO toDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
-        dto.setPassword(user.getPassword());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setRoles(user.getRoles() != null
@@ -24,7 +22,7 @@ public class UserMapper {
         User user = new User();
         user.setId(dto.getId());
         user.setEmail(dto.getEmail());
-        dto.setPassword(user.getPassword());
+        user.setPassword(dto.getPassword());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setRoles(dto.getRoles() != null

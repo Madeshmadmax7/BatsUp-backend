@@ -1,11 +1,11 @@
 package com.example.cricket_backend.controller;
 
-import com.example.cricket_backend.dto.*;
-import com.example.cricket_backend.service.*;
-import java.util.List;
-
+import com.example.cricket_backend.dto.RoundDTO;
+import com.example.cricket_backend.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/round")
@@ -16,7 +16,7 @@ public class RoundController {
     @PostMapping("/create")
     public RoundDTO createRound(@RequestParam Long tournamentId,
                                 @RequestParam int roundNumber,
-                                @RequestParam Long teamOneId,
+                                @RequestParam(required = false) Long teamOneId,
                                 @RequestParam(required = false) Long teamTwoId) {
         return roundService.createRound(tournamentId, roundNumber, teamOneId, teamTwoId);
     }
@@ -49,10 +49,5 @@ public class RoundController {
     @DeleteMapping("/{id}")
     public void deleteRound(@PathVariable Long id) {
         roundService.deleteRound(id);
-    }
-
-    @PostMapping("/{roundId}/scorecard")
-    public ScoreCardDTO addScoreCard(@PathVariable Long roundId, @RequestBody ScoreCardDTO dto) {
-        return roundService.addScoreCardToRound(roundId, dto);
     }
 }

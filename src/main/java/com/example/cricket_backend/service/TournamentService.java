@@ -116,10 +116,10 @@ public class TournamentService {
     public List<ScoreCardDTO> getScoreCardsForTournament(Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
         return tournament.getRounds().stream()
-                .map(Round::getScoreCard)
-                .filter(Objects::nonNull)
+                .flatMap(r -> r.getMatches().stream())
+                .flatMap(m -> m.getScoreCards().stream())
                 .map(ScoreCardMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

@@ -1,77 +1,57 @@
 package com.example.cricket_backend.service;
 
-import com.example.cricket_backend.dto.*;
-import com.example.cricket_backend.entity.*;
-import com.example.cricket_backend.mapper.*;
-import com.example.cricket_backend.repository.*;
-import jakarta.transaction.Transactional;
-
+import com.example.cricket_backend.dto.ScoreCardDTO;
+import com.example.cricket_backend.entity.Match;
+import com.example.cricket_backend.entity.Player;
+import com.example.cricket_backend.entity.ScoreCard;
+import com.example.cricket_backend.entity.Team;
+import com.example.cricket_backend.mapper.ScoreCardMapper;
+import com.example.cricket_backend.repository.MatchRepository;
+import com.example.cricket_backend.repository.PlayerRepository;
+import com.example.cricket_backend.repository.ScoreCardRepository;
+import com.example.cricket_backend.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class ScoreCardService {
     @Autowired private ScoreCardRepository scoreCardRepository;
-    @Autowired private PlayerRepository playerRepository;
+    @Autowired private MatchRepository matchRepository;
     @Autowired private TeamRepository teamRepository;
-    @Autowired private RoundRepository roundRepository;
+    @Autowired private PlayerRepository playerRepository;
 
-    @Transactional
-    public ScoreCardDTO createScoreCard(ScoreCardDTO dto) {
-        ScoreCard scoreCard = new ScoreCard();
-        scoreCard.setRuns(dto.getRuns());
-        scoreCard.setWickets(dto.getWickets());
-        scoreCard.setCatches(dto.getCatches());
+    public ScoreCardDTO addScoreCard(Long matchId, ScoreCardDTO dto) {
+        Match match = matchRepository.findById(matchId).orElseThrow();
 
-        if (dto.getPlayerId() != null)
-            scoreCard.setPlayer(playerRepository.findById(dto.getPlayerId()).orElseThrow());
+        ScoreCard score = new ScoreCard();
+        score.setRuns(dto.getRuns());
+        score.setWickets(dto.getWickets());
+        score.setCatches(dto.getCatches());
 
-        if (dto.getTeamId() != null)
-            scoreCard.setTeam(teamRepository.findById(dto.getTeamId()).orElseThrow());
+        if (dto.getPlayerId() != null) {
+            Player player = playerRepository.findById(dto.getPlayerId()).orElseThrow();
+            score.setPlayer(player);
+        }
 
-        if (dto.getRoundId() != null)
-            scoreCard.setRound(roundRepository.findById(dto.getRoundId()).orElseThrow());
+        if (dto.getTeamId() != null) {
+            Team team = teamRepository.findById(dto.getTeamId()).orElseThrow();
+            score.setTeam(team);
+        }
 
-        scoreCardRepository.save(scoreCard);
-        return ScoreCardMapper.toDTO(scoreCard);
+        score.setMatch(match);
+        scoreCardRepository.save(score);
+
+        return ScoreCardMapper.toDTO(score);
     }
 
-    public ScoreCardDTO getScoreCardById(Long id) {
-        ScoreCard scoreCard = scoreCardRepository.findById(id).orElseThrow();
-        return ScoreCardMapper.toDTO(scoreCard);
+    public List<ScoreCardDTO> getScoreCardsByMatch(Long matchId) {
+        return scoreCardRepository.findByMatchId(matchId)
+                .stream().map(ScoreCardMapper::toDTO).toList();
     }
 
-    public List<ScoreCardDTO> getAllScoreCards() {
-        return scoreCardRepository.findAll().stream()
-                .map(ScoreCardMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public ScoreCardDTO updateScoreCard(Long id, ScoreCardDTO dto) {
-        ScoreCard scoreCard = scoreCardRepository.findById(id).orElseThrow();
-        scoreCard.setRuns(dto.getRuns());
-        scoreCard.setWickets(dto.getWickets());
-        scoreCard.setCatches(dto.getCatches());
-
-        if (dto.getPlayerId() != null)
-            scoreCard.setPlayer(playerRepository.findById(dto.getPlayerId()).orElseThrow());
-
-        if (dto.getTeamId() != null)
-            scoreCard.setTeam(teamRepository.findById(dto.getTeamId()).orElseThrow());
-
-        if (dto.getRoundId() != null)
-            scoreCard.setRound(roundRepository.findById(dto.getRoundId()).orElseThrow());
-
-        scoreCardRepository.save(scoreCard);
-        return ScoreCardMapper.toDTO(scoreCard);
-    }
-
-    @Transactional
-    public void deleteScoreCard(Long id) {
-        scoreCardRepository.deleteById(id);
+    public void deleteScoreCard(Long scoreCardId) {
+        scoreCardRepository.deleteById(scoreCardId);
     }
 }
