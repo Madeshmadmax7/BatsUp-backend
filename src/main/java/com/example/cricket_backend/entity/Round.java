@@ -1,6 +1,8 @@
 package com.example.cricket_backend.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "rounds")
@@ -18,6 +20,7 @@ public class Round {
     // Represents teams playing 1vs1 in a round
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_one_id")
+
     private Team teamOne;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,7 +31,8 @@ public class Round {
     @JoinColumn(name = "score_card_id")
     private ScoreCard scoreCard;
 
-    public Round() {}
+    public Round() {
+    }
 
     public Long getId() {
         return id;
@@ -78,5 +82,4 @@ public class Round {
         this.scoreCard = scoreCard;
     }
 
-    // Getters and setters...
 }

@@ -93,6 +93,12 @@ public class FanService {
         return FanMapper.toDTO(fan);
     }
 
+    public FanDTO getFanByUserId(Long userId) {
+        Fan fan = fanRepository.findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Fan not found for userId=" + userId));
+        return FanMapper.toDTO(fan);
+    }
+
     @Transactional
     public FanDTO updateFollowedTournaments(Long fanId, Set<Long> tournamentIds) {
         Fan fan = fanRepository.findById(fanId).orElseThrow();

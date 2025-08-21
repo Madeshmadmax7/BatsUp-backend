@@ -5,9 +5,7 @@ import com.example.cricket_backend.entity.*;
 import com.example.cricket_backend.mapper.*;
 import com.example.cricket_backend.repository.*;
 import jakarta.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,20 +19,40 @@ public class RoundService {
     @Autowired private ScoreCardRepository scoreCardRepository;
     @Autowired private PlayerRepository playerRepository;
 
+    // Generate fixture - pairs teams in order
     @Transactional
-    public RoundDTO createRound(Long tournamentId, int roundNumber, Long teamOneId, Long teamTwoId) {
+    public List<RoundDTO> generateRounds(Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
-        Team teamOne = teamRepository.findById(teamOneId).orElseThrow();
-        Team teamTwo = teamRepository.findById(teamTwoId).orElseThrow();
+        List<Team> teams = new ArrayList<>(tournament.getTeams());
+        teams.sort(Comparator.comparing(Team::getId));
+        roundRepository.deleteByTournamentId(tournamentId);
 
-        Round round = new Round();
-        round.setTournament(tournament);
-        round.setRoundNumber(roundNumber);
-        round.setTeamOne(teamOne);
-        round.setTeamTwo(teamTwo);
+        List<Round> rounds = new ArrayList<>();
+        int roundNum = 1;
+        for (int i = 0; i < teams.size(); i += 2) {
+            Team t1 = teams.get(i);
+            Team t2 = (i + 1 < teams.size()) ? teams.get(i + 1) : null;
+            Round round = new Round();
+            round.setTournament(tournament);
+            round.setRoundNumber(roundNum++);
+            round.setTeamOne(t1);
+            round.setTeamTwo(t2);
+            rounds.add(round);
+        }
+        roundRepository.saveAll(rounds);
+        return rounds.stream().map(RoundMapper::toDTO).collect(Collectors.toList());
+    }
 
-        roundRepository.save(round);
-        return RoundMapper.toDTO(round);
+    public List<RoundDTO> getAllRounds() {
+        return roundRepository.findAll().stream()
+                .sorted(Comparator.comparing(Round::getTournament, Comparator.comparing(Tournament::getId))
+                        .thenComparing(Round::getRoundNumber).thenComparing(Round::getId))
+                .map(RoundMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public List<RoundDTO> getRoundsByTournament(Long tournamentId) {
+        return roundRepository.findByTournamentIdOrderByRoundNumberAscIdAsc(tournamentId)
+                .stream().map(RoundMapper::toDTO).collect(Collectors.toList());
     }
 
     public RoundDTO getRoundById(Long id) {
@@ -42,15 +60,24 @@ public class RoundService {
         return RoundMapper.toDTO(round);
     }
 
-    public List<RoundDTO> getAllRounds() {
-        return roundRepository.findAll().stream()
-                .map(RoundMapper::toDTO)
-                .collect(Collectors.toList());
+    @Transactional
+    public RoundDTO createRound(Long tournamentId, int roundNumber, Long teamOneId, Long teamTwoId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
+        Team teamOne = teamRepository.findById(teamOneId).orElseThrow();
+        Team teamTwo = teamTwoId != null ? teamRepository.findById(teamTwoId).orElse(null) : null;
+        Round round = new Round();
+        round.setTournament(tournament);
+        round.setRoundNumber(roundNumber);
+        round.setTeamOne(teamOne);
+        round.setTeamTwo(teamTwo);
+        roundRepository.save(round);
+        return RoundMapper.toDTO(round);
     }
 
     @Transactional
     public RoundDTO updateRound(Long id, RoundDTO dto) {
         Round round = roundRepository.findById(id).orElseThrow();
+        // Optional patch logic for teams here
         round.setRoundNumber(dto.getRoundNumber());
         roundRepository.save(round);
         return RoundMapper.toDTO(round);
@@ -62,29 +89,21 @@ public class RoundService {
     }
 
     @Transactional
-    public ScoreCardDTO addScoreCardToRound(Long roundId, ScoreCardDTO scoreCardDTO) {
+    public ScoreCardDTO addScoreCardToRound(Long roundId, ScoreCardDTO dto) {
         Round round = roundRepository.findById(roundId).orElseThrow();
-
-        ScoreCard scoreCard = new ScoreCard();
-        scoreCard.setRuns(scoreCardDTO.getRuns());
-        scoreCard.setWickets(scoreCardDTO.getWickets());
-        scoreCard.setCatches(scoreCardDTO.getCatches());
-
-        if (scoreCardDTO.getPlayerId() != null) {
-            Player player = playerRepository.findById(scoreCardDTO.getPlayerId()).orElseThrow();
-            scoreCard.setPlayer(player);
+        ScoreCard score = new ScoreCard();
+        score.setRuns(dto.getRuns());
+        score.setWickets(dto.getWickets());
+        score.setCatches(dto.getCatches());
+        if (dto.getPlayerId() != null) {
+            score.setPlayer(playerRepository.findById(dto.getPlayerId()).orElse(null));
         }
-
-        if (scoreCardDTO.getTeamId() != null) {
-            Team team = teamRepository.findById(scoreCardDTO.getTeamId()).orElseThrow();
-            scoreCard.setTeam(team);
+        if (dto.getTeamId() != null) {
+            score.setTeam(teamRepository.findById(dto.getTeamId()).orElse(null));
         }
-
-        scoreCardRepository.save(scoreCard);
-
-        round.setScoreCard(scoreCard);
+        scoreCardRepository.save(score);
+        round.setScoreCard(score);
         roundRepository.save(round);
-
-        return ScoreCardMapper.toDTO(scoreCard);
+        return ScoreCardMapper.toDTO(score);
     }
 }

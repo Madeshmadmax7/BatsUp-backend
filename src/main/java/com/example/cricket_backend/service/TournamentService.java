@@ -15,10 +15,14 @@ import java.util.stream.Stream;
 
 @Service
 public class TournamentService {
-    @Autowired private TournamentRepository tournamentRepository;
-    @Autowired private TeamRepository teamRepository;
-    @Autowired private RoundRepository roundRepository;
-    @Autowired private NewsLetterRepository newsletterRepository;
+    @Autowired
+    private TournamentRepository tournamentRepository;
+    @Autowired
+    private TeamRepository teamRepository;
+    @Autowired
+    private RoundRepository roundRepository;
+    @Autowired
+    private NewsLetterRepository newsletterRepository;
 
     @Transactional
     public TournamentDTO createTournament(TournamentDTO dto) {
@@ -41,9 +45,9 @@ public class TournamentService {
         tournament.setLocation(dto.getLocation());
         tournament.setStartDate(dto.getStartDate());
         tournament.setEndDate(dto.getEndDate());
-        tournament.setMatchType(dto.getMatchType());           // <-- Add this
-        tournament.setDescription(dto.getDescription());       // <-- Add this
-        tournament.setImage(dto.getImage());                     // <-- Add this
+        tournament.setMatchType(dto.getMatchType()); // <-- Add this
+        tournament.setDescription(dto.getDescription()); // <-- Add this
+        tournament.setImage(dto.getImage()); // <-- Add this
         tournamentRepository.save(tournament);
         return TournamentMapper.toDTO(tournament);
     }
@@ -59,14 +63,13 @@ public class TournamentService {
                 .collect(Collectors.toList());
     }
 
-
     @Transactional
     public TournamentDTO removeTeamFromTournament(Long tournamentId, Long teamId) {
         Tournament tournament = tournamentRepository.findById(tournamentId)
-            .orElseThrow(() -> new RuntimeException("Tournament not found: " + tournamentId));
+                .orElseThrow(() -> new RuntimeException("Tournament not found: " + tournamentId));
         Team team = teamRepository.findById(teamId)
-            .orElseThrow(() -> new RuntimeException("Team not found: " + teamId));
-        
+                .orElseThrow(() -> new RuntimeException("Team not found: " + teamId));
+
         tournament.getTeams().remove(team);
         team.getTournaments().remove(tournament);
 
@@ -78,6 +81,7 @@ public class TournamentService {
         }
         return TournamentMapper.toDTO(tournament);
     }
+
     @Transactional
     public void deleteTournament(Long id) {
         tournamentRepository.deleteById(id);
@@ -102,8 +106,6 @@ public class TournamentService {
         return NewsLetterMapper.toDTO(newsletter);
     }
 
-    // --- Extra methods needed by frontend ---
-
     public List<TeamDTO> getTeamsForTournament(Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
         return tournament.getTeams().stream()
@@ -114,8 +116,10 @@ public class TournamentService {
     public List<ScoreCardDTO> getScoreCardsForTournament(Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
         return tournament.getRounds().stream()
-                .flatMap(round -> round.getScoreCard() != null ? Stream.of(round.getScoreCard()) : Stream.empty())
+                .map(Round::getScoreCard)
+                .filter(Objects::nonNull)
                 .map(ScoreCardMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
 }

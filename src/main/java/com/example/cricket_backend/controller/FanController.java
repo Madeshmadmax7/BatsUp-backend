@@ -1,51 +1,46 @@
 package com.example.cricket_backend.controller;
 
-import com.example.cricket_backend.dto.*;
-import com.example.cricket_backend.service.*;
+import com.example.cricket_backend.dto.FanDTO;
+import com.example.cricket_backend.service.FanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/fan")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class FanController {
+
     @Autowired private FanService fanService;
 
     @PostMapping("/create")
-    public FanDTO createFan(@RequestParam Long userId, @RequestBody FanDTO dto) {
-        return fanService.createFan(userId, dto);
+    public ResponseEntity<FanDTO> createFan(@RequestParam Long userId, @RequestBody FanDTO dto) {
+        return ResponseEntity.ok(fanService.createFan(userId, dto));
     }
 
     @GetMapping("/{id}")
-    public FanDTO getFan(@PathVariable Long id) {
-        return fanService.getFanById(id);
+    public ResponseEntity<FanDTO> getFan(@PathVariable Long id) {
+        return ResponseEntity.ok(fanService.getFanById(id));
     }
 
-    @GetMapping("/all")
-    public List<FanDTO> getAllFans() {
-        return fanService.getAllFans();
+    @GetMapping("/by-user/{userId}")
+    public ResponseEntity<FanDTO> getFanByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(fanService.getFanByUserId(userId));
     }
 
     @PutMapping("/{id}")
-    public FanDTO updateFan(@PathVariable Long id, @RequestBody FanDTO dto) {
-        return fanService.updateFan(id, dto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteFan(@PathVariable Long id) {
-        fanService.deleteFan(id);
+    public ResponseEntity<FanDTO> updateFan(@PathVariable Long id, @RequestBody FanDTO dto) {
+        return ResponseEntity.ok(fanService.updateFan(id, dto));
     }
 
     @PutMapping("/{fanId}/follow-teams")
-    public FanDTO updateFollowedTeams(@PathVariable Long fanId, @RequestBody Set<Long> teamIds) {
-        return fanService.updateFollowedTeams(fanId, teamIds);
+    public ResponseEntity<FanDTO> updateTeams(@PathVariable Long fanId, @RequestBody Set<Long> teamIds) {
+        return ResponseEntity.ok(fanService.updateFollowedTeams(fanId, teamIds));
     }
 
     @PutMapping("/{fanId}/follow-tournaments")
-    public FanDTO updateFollowedTournaments(@PathVariable Long fanId, @RequestBody Set<Long> tournamentIds) {
-        return fanService.updateFollowedTournaments(fanId, tournamentIds);
+    public ResponseEntity<FanDTO> updateTournaments(@PathVariable Long fanId, @RequestBody Set<Long> tournamentIds) {
+        return ResponseEntity.ok(fanService.updateFollowedTournaments(fanId, tournamentIds));
     }
 }

@@ -11,12 +11,27 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(unique = true, nullable = false)
     private String name;
-
+    
     @Column(nullable = false)
     private String password;
+
+    @Column
+    private String logo;
+
+    @Column
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Player> players = new HashSet<>();
@@ -41,6 +56,13 @@ public class Team {
         this.id = id;
     }
 
+    public String getLogo()
+    {
+        return logo;
+    }
+    public void setLogo(String logo) { 
+        this.logo = logo;
+    }
     public String getName() {
         return name;
     }

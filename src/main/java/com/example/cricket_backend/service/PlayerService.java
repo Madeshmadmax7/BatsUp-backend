@@ -85,6 +85,7 @@ public class PlayerService {
         return PlayerMapper.toDTO(saved);
     }
 
+    
     @Transactional
     public PlayerDTO createPlayerWithoutUser(PlayerDTO playerDTO) {
         Player player = new Player();
