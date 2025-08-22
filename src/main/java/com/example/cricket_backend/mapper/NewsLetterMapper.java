@@ -3,10 +3,7 @@ package com.example.cricket_backend.mapper;
 import com.example.cricket_backend.dto.NewsLetterDTO;
 import com.example.cricket_backend.entity.NewsLetter;
 
-import java.util.stream.Collectors;
-
 public class NewsLetterMapper {
-
     public static NewsLetterDTO toDTO(NewsLetter entity) {
         NewsLetterDTO dto = new NewsLetterDTO();
         dto.setId(entity.getId());
@@ -17,14 +14,26 @@ public class NewsLetterMapper {
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
 
-        dto.setTeamId(entity.getTeam() != null ? entity.getTeam().getId() : null);
-        dto.setTeamName(entity.getTeam() != null ? entity.getTeam().getName() : null);
-        dto.setTournamentId(entity.getTournament() != null ? entity.getTournament().getId() : null);
+        if (entity.getTournament() != null) {
+            dto.setTournamentId(entity.getTournament().getId());
+            dto.setTournamentName(entity.getTournament().getName());
+        }
 
-        if (entity.getFans() != null) {
-            dto.setFanIds(entity.getFans().stream().map(f -> f.getId()).collect(Collectors.toSet()));
+        if (entity.getTeam() != null) {
+            dto.setTeamId(entity.getTeam().getId());
+            dto.setTeamName(entity.getTeam().getName());
         }
 
         return dto;
+    }
+
+    public static NewsLetter toEntity(NewsLetterDTO dto) {
+        NewsLetter entity = new NewsLetter();
+        entity.setId(dto.getId());
+        entity.setSubject(dto.getSubject());
+        entity.setSummary(dto.getSummary());
+        entity.setContent(dto.getContent());
+        entity.setImageLink(dto.getImageLink());
+        return entity;
     }
 }

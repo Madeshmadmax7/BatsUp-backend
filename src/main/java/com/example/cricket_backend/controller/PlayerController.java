@@ -2,6 +2,7 @@ package com.example.cricket_backend.controller;
 
 import com.example.cricket_backend.dto.PlayerDTO;
 import com.example.cricket_backend.dto.TeamDTO;
+import com.example.cricket_backend.dto.TournamentDTO;
 import com.example.cricket_backend.service.PlayerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +40,19 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
-
     @PutMapping("/{playerId}/register")
     public PlayerDTO registerPlayer(
             @PathVariable Long playerId,
             @RequestParam Long userId,
             @RequestBody PlayerDTO dto) {
         return playerService.registerPlayer(playerId, userId, dto);
-}
+    }
 
     @PostMapping("/register")
     public ResponseEntity<PlayerDTO> registerOrUpdate(@RequestBody PlayerDTO dto) {
         PlayerDTO saved = playerService.registerOrUpdatePlayer(dto); // <-- expects PlayerDTO
         return ResponseEntity.ok(saved);
     }
-
 
     @GetMapping("/all")
     public List<PlayerDTO> getAllPlayers() {
@@ -88,4 +87,20 @@ public class PlayerController {
             @RequestBody Set<Long> playerIds) {
         return playerService.createTeam(creatorPlayerId, teamName, password, playerIds);
     }
+
+    @GetMapping("/{playerId}/tournaments")
+    public List<TournamentDTO> getPlayerTournaments(@PathVariable Long playerId) {
+        return playerService.getPlayerRegisteredTournaments(playerId);
+    }
+
+    @GetMapping("/by-user/{userId}")
+    public PlayerDTO getPlayerByUserId(@PathVariable Long userId) {
+        return playerService.findByUserId(userId);
+    }
+
+    @GetMapping("/{playerId}/registered-tournaments")
+    public List<TournamentDTO> getRegisteredTournamentsForPlayer(@PathVariable Long playerId) {
+        return playerService.getPlayerRegisteredTournaments(playerId);
+    }
+
 }

@@ -13,7 +13,6 @@ public class TournamentMapper {
         dto.setId(tournament.getId());
 
         dto.setTournamentName(tournament.getName());
-
         dto.setLocation(tournament.getLocation());
         dto.setStartDate(tournament.getStartDate());
         dto.setEndDate(tournament.getEndDate());
@@ -45,6 +44,12 @@ public class TournamentMapper {
                 .collect(Collectors.toList())
         );
 
+        dto.setPlayerIds(
+            tournament.getTeams().stream()
+                .flatMap(team -> team.getPlayers().stream())
+                .map(player -> player.getId())
+                .collect(Collectors.toSet())
+        );
 
         return dto;
     }

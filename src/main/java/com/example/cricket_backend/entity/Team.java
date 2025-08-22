@@ -11,10 +11,10 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String name;
-    
+
     @Column(nullable = false)
     private String password;
 
@@ -28,25 +28,25 @@ public class Team {
         return location;
     }
 
-
     public void setLocation(String location) {
         this.location = location;
     }
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Player> players = new HashSet<>();
 
-    @ManyToMany(mappedBy = "teams")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tournament_teams", joinColumns = @JoinColumn(name = "team_id"), inverseJoinColumns = @JoinColumn(name = "tournament_id"))
     private Set<Tournament> tournaments = new HashSet<>();
 
-    @OneToOne(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private NewsLetter newsletter;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<NewsLetter> newsletters = new HashSet<>();
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<ScoreCard> scoreCards = new HashSet<>();
 
-    public Team() {}
-
+    public Team() {
+    }
 
     public Long getId() {
         return id;
@@ -56,13 +56,14 @@ public class Team {
         this.id = id;
     }
 
-    public String getLogo()
-    {
+    public String getLogo() {
         return logo;
     }
-    public void setLogo(String logo) { 
+
+    public void setLogo(String logo) {
         this.logo = logo;
     }
+
     public String getName() {
         return name;
     }
@@ -95,19 +96,19 @@ public class Team {
         this.tournaments = tournaments;
     }
 
-    public NewsLetter getNewsletter() {
-        return newsletter;
-    }
-
-    public void setNewsletter(NewsLetter newsletter) {
-        this.newsletter = newsletter;
-    }
-
     public Set<ScoreCard> getScoreCards() {
         return scoreCards;
     }
 
     public void setScoreCards(Set<ScoreCard> scoreCards) {
         this.scoreCards = scoreCards;
+    }
+
+    public Set<NewsLetter> getNewsletters() {
+        return newsletters;
+    }
+
+    public void setNewsletters(Set<NewsLetter> newsletters) {
+        this.newsletters = newsletters;
     }
 }

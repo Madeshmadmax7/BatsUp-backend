@@ -2,19 +2,25 @@ package com.example.cricket_backend.service;
 
 import com.example.cricket_backend.dto.PlayerDTO;
 import com.example.cricket_backend.dto.TeamDTO;
+import com.example.cricket_backend.dto.TournamentDTO;
 import com.example.cricket_backend.entity.Player;
 import com.example.cricket_backend.entity.Team;
+import com.example.cricket_backend.entity.Tournament;
 import com.example.cricket_backend.entity.User;
 import com.example.cricket_backend.mapper.PlayerMapper;
 import com.example.cricket_backend.mapper.TeamMapper;
+import com.example.cricket_backend.mapper.TournamentMapper;
 import com.example.cricket_backend.repository.PlayerRepository;
 import com.example.cricket_backend.repository.TeamRepository;
+import com.example.cricket_backend.repository.TournamentRepository;
 import com.example.cricket_backend.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,10 +31,15 @@ public class PlayerService {
 
     @Autowired
     private PlayerRepository playerRepository;
+
     @Autowired
     private TeamRepository teamRepository;
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TournamentRepository tournamentRepository;
 
     @Transactional
     public PlayerDTO createPlayer(Long userId, PlayerDTO playerDTO) {
@@ -45,28 +56,22 @@ public class PlayerService {
         return PlayerMapper.toDTO(player);
     }
 
+    @Transactional
     public PlayerDTO registerOrUpdatePlayer(PlayerDTO playerDTO) {
-        // 1. Validate team name + password
-        Team team = teamRepository.findByNameAndPassword(
-                playerDTO.getTeamName(), playerDTO.getTeamPassword())
+        Team team = teamRepository.findByNameAndPassword(playerDTO.getTeamName(), playerDTO.getTeamPassword())
                 .orElseThrow(() -> new RuntimeException("Invalid team name or password"));
 
-        // 2. Check if captain already created slot with this nickname
         Optional<Player> existingSlotOpt = playerRepository.findByNicknameAndTeamAndUserIsNull(
                 playerDTO.getNickname(), team);
 
         Player player;
         if (existingSlotOpt.isPresent()) {
-            // Case A: Slot exists → attach user
             player = existingSlotOpt.get();
         } else {
-            // Case B: No slot → check team size
             long playerCount = playerRepository.countByTeam(team);
             if (playerCount >= 15) {
                 throw new RuntimeException("Team already has 15 players, cannot add more.");
             }
-
-            // Create a new player entry
             player = new Player();
             player.setNickname(playerDTO.getNickname());
             player.setJerseyNumber(playerDTO.getJerseyNumber());
@@ -85,7 +90,6 @@ public class PlayerService {
         return PlayerMapper.toDTO(saved);
     }
 
-    
     @Transactional
     public PlayerDTO createPlayerWithoutUser(PlayerDTO playerDTO) {
         Player player = new Player();
@@ -124,6 +128,9 @@ public class PlayerService {
         Player player = playerRepository.findById(playerId).orElseThrow();
         player.setNickname(dto.getNickname());
         player.setJerseyNumber(dto.getJerseyNumber());
+        player.setCity(dto.getCity());
+        player.setPhone(dto.getPhone());
+        player.setPlayerType(dto.getPlayerType());
         playerRepository.save(player);
         return PlayerMapper.toDTO(player);
     }
@@ -168,7 +175,6 @@ public class PlayerService {
         Player player = playerRepository.findById(playerId)
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-        // Update all fields from DTO if provided
         player.setNickname(dto.getNickname());
         player.setTeamName(dto.getTeamName());
         player.setJerseyNumber(dto.getJerseyNumber());
@@ -176,14 +182,12 @@ public class PlayerService {
         player.setPhone(dto.getPhone());
         player.setPlayerType(dto.getPlayerType());
 
-        // Set user
         if (userId != null) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
             player.setUser(user);
         }
 
-        // Set team
         if (dto.getTeamId() != null) {
             Team team = teamRepository.findById(dto.getTeamId())
                     .orElseThrow(() -> new RuntimeException("Team not found"));
@@ -193,5 +197,47 @@ public class PlayerService {
         Player saved = playerRepository.save(player);
         return PlayerMapper.toDTO(saved);
     }
+
+    public List<TournamentDTO> getPlayerTournaments(Long playerId) {
+        Player player = playerRepository.findWithTeamAndTournamentsById(playerId)
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+
+        Set<Tournament> tournaments = new HashSet<>();
+
+        if (player.getTeam() != null && player.getTeam().getTournaments() != null) {
+            tournaments.addAll(player.getTeam().getTournaments());
+        }
+
+        return tournaments.stream()
+                .map(TournamentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public PlayerDTO findByUserId(Long userId) {
+        Player player = playerRepository.findByUser_Id(userId)
+                .orElseThrow(() -> new RuntimeException("Player not found for user id: " + userId));
+        return PlayerMapper.toDTO(player);
+    }
+
+    @Transactional
+    public List<TournamentDTO> getPlayerRegisteredTournaments(Long playerId) {
+        Player player = playerRepository.findById(playerId)
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+
+        Team team = player.getTeam();
+        if (team == null) {
+            return Collections.emptyList(); // player has no team assigned
+        }
+
+        Set<Tournament> tournaments = team.getTournaments();
+        if (tournaments == null || tournaments.isEmpty()) {
+            return Collections.emptyList(); // team has no tournaments
+        }
+
+        return tournaments.stream()
+                .map(TournamentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
 }

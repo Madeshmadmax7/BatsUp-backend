@@ -10,37 +10,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/newsletter")
-@CrossOrigin(origins = "http://localhost:5173")
 public class NewsLetterController {
 
     @Autowired
-    private NewsLetterService newsletterService;
-
-    @GetMapping("/all")
-    public ResponseEntity<List<NewsLetterDTO>> getAll() {
-        return ResponseEntity.ok(newsletterService.getAllNewsletters());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<NewsLetterDTO> getById(@PathVariable Long id) {
-        NewsLetterDTO dto = newsletterService.getNewsletterById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
-    }
+    private NewsLetterService newsLetterService;
 
     @PostMapping("/create")
     public ResponseEntity<NewsLetterDTO> create(@RequestBody NewsLetterDTO dto) {
-        return ResponseEntity.ok(newsletterService.createNewsletter(dto));
+        return ResponseEntity.ok(newsLetterService.createNewsLetter(dto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<NewsLetterDTO> update(@PathVariable Long id, @RequestBody NewsLetterDTO dto) {
-        NewsLetterDTO updated = newsletterService.updateNewsletter(id, dto);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    @GetMapping("/all")
+    public ResponseEntity<List<NewsLetterDTO>> getAll() {
+        return ResponseEntity.ok(newsLetterService.getAllNewsLetters());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        newsletterService.deleteNewsletter(id);
+        newsLetterService.deleteNewsLetter(id);
         return ResponseEntity.noContent().build();
     }
 }

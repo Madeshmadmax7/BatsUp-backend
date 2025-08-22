@@ -14,9 +14,18 @@ public class TournamentDTO {
     private String image;
     private Set<Long> teamIds;
     private Set<Long> roundIds;
-    
+
     private List<String> teamNames;
     private List<TeamDTO> teams;
+
+    private Set<Long> playerIds;
+
+    public Set<Long> getPlayerIds() {
+        return playerIds;
+    }
+    public void setPlayerIds(Set<Long> playerIds) {
+        this.playerIds = playerIds;
+    }
 
     public List<TeamDTO> getTeams() { return teams; }
     public void setTeams(List<TeamDTO> teams) { this.teams = teams; }
@@ -50,10 +59,7 @@ public class TournamentDTO {
 
     public Set<Long> getRoundIds() { return roundIds; }
     public void setRoundIds(Set<Long> roundIds) { this.roundIds = roundIds; }
-    public List<String> getTeamNames() {
-        return teamNames;
-    }
-    public void setTeamNames(List<String> teamNames) {
-        this.teamNames = teamNames;
-    }
+
+    public List<String> getTeamNames() { return teamNames; }
+    public void setTeamNames(List<String> teamNames) { this.teamNames = teamNames; }
 }
