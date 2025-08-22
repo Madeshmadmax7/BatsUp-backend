@@ -6,6 +6,7 @@ import com.example.cricket_backend.entity.Round;
 import com.example.cricket_backend.entity.Team;
 import com.example.cricket_backend.entity.Tournament;
 import com.example.cricket_backend.mapper.RoundMapper;
+import com.example.cricket_backend.repository.MatchRepository;
 import com.example.cricket_backend.repository.RoundRepository;
 import com.example.cricket_backend.repository.TeamRepository;
 import com.example.cricket_backend.repository.TournamentRepository;
@@ -18,15 +19,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class RoundService {
-    @Autowired private RoundRepository roundRepository;
     @Autowired private TournamentRepository tournamentRepository;
     @Autowired private TeamRepository teamRepository;
+    @Autowired private RoundRepository roundRepository;
+    @Autowired private MatchRepository matchRepository;
 
     @Transactional
     public List<RoundDTO> generateRounds(Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();
 
-        // clear old rounds for this tournament
+        // Clear old rounds and matches
         roundRepository.deleteByTournamentId(tournamentId);
 
         List<Team> teams = new ArrayList<>(tournament.getTeams());
@@ -34,11 +36,11 @@ public class RoundService {
 
         List<Round> toSave = new ArrayList<>();
 
-        // Round 1: actual pairings
         Round round1 = new Round();
         round1.setTournament(tournament);
         round1.setRoundNumber(1);
 
+        // Create matches for round 1 (pair by twos or BYE if odd)
         for (int i = 0; i < teams.size(); i += 2) {
             Team t1 = teams.get(i);
             Team t2 = (i + 1 < teams.size()) ? teams.get(i + 1) : null;
@@ -47,7 +49,6 @@ public class RoundService {
             m.setRound(round1);
             m.setTeamOneId(t1.getId());
             m.setTeamOneName(t1.getName());
-
             if (t2 != null) {
                 m.setTeamTwoId(t2.getId());
                 m.setTeamTwoName(t2.getName());
@@ -60,7 +61,7 @@ public class RoundService {
         }
         toSave.add(round1);
 
-        // Round 2: half as many TBD matches
+        // Create next round with TBD matches (half matches)
         int nextMatches = Math.max(1, (int) Math.ceil(round1.getMatches().size() / 2.0));
         Round round2 = new Round();
         round2.setTournament(tournament);
@@ -76,7 +77,6 @@ public class RoundService {
         toSave.add(round2);
 
         roundRepository.saveAll(toSave);
-
         return toSave.stream().map(RoundMapper::toDTO).collect(Collectors.toList());
     }
 
@@ -100,7 +100,6 @@ public class RoundService {
         return RoundMapper.toDTO(round);
     }
 
-    // Create a round (optionally with one match if team ids provided)
     @Transactional
     public RoundDTO createRound(Long tournamentId, int roundNumber, Long teamOneId, Long teamTwoId) {
         Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow();

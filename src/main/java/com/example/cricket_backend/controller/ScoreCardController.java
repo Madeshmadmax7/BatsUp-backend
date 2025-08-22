@@ -8,23 +8,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/scorecards")
+@RequestMapping("/api/scorecard")
 @CrossOrigin(origins = "http://localhost:5173")
 public class ScoreCardController {
-    @Autowired private ScoreCardService scoreCardService;
 
-    @PostMapping("/add/{matchId}")
-    public ScoreCardDTO addScoreCard(@PathVariable Long matchId, @RequestBody ScoreCardDTO dto) {
-        return scoreCardService.addScoreCard(matchId, dto);
+    @Autowired
+    private ScoreCardService scoreCardService;
+
+    @PostMapping("/create")
+    public ScoreCardDTO createScoreCard(@RequestBody ScoreCardDTO dto) {
+        return scoreCardService.createScoreCard(dto);
     }
 
-    @GetMapping("/match/{matchId}")
+    @GetMapping("/{matchId}")
     public List<ScoreCardDTO> getScoreCardsByMatch(@PathVariable Long matchId) {
-        return scoreCardService.getScoreCardsByMatch(matchId);
+        return scoreCardService.getScoreCardsByMatchId(matchId);
     }
 
-    @DeleteMapping("/{scoreCardId}")
-    public void deleteScoreCard(@PathVariable Long scoreCardId) {
-        scoreCardService.deleteScoreCard(scoreCardId);
+    @PutMapping("/{id}")
+    public ScoreCardDTO updateScoreCard(@PathVariable Long id, @RequestBody ScoreCardDTO dto) {
+        return scoreCardService.updateScoreCard(id, dto);
+    }
+
+    @GetMapping("/all")
+    public List<ScoreCardDTO> getAllScoreCards() {
+        return scoreCardService.getAllScoreCards();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteScoreCard(@PathVariable Long id) {
+        scoreCardService.deleteScoreCard(id);
     }
 }

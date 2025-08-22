@@ -1,10 +1,9 @@
 package com.example.cricket_backend.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "newsletters")
@@ -14,114 +13,69 @@ public class NewsLetter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
-    private Team team;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tournament_id")
-    private Tournament tournament;
-
-    @ManyToMany
-    @JoinTable(
-        name = "newsletter_fans",
-        joinColumns = @JoinColumn(name = "newsletter_id"),
-        inverseJoinColumns = @JoinColumn(name = "fan_id"))
-    private Set<Fan> fans;
-
-    @Column(length = 2000)
-    private String content;
-
-    @Column(length = 255)
     private String subject;
-
-    @Column(length = 500)
     private String summary;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
     private String imageLink;
 
-    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt = new Date();
 
-    @Column
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt = new Date();
 
-    public NewsLetter() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    @ManyToMany
+    @JoinTable(
+            name = "newsletter_fans",
+            joinColumns = @JoinColumn(name = "newsletter_id"),
+            inverseJoinColumns = @JoinColumn(name = "fan_id")
+    )
+    private Set<Fan> fans = new HashSet<>();
+
+    @PreUpdate
+    public void setLastUpdate() {
+        this.updatedAt = new Date();
     }
 
-    // Getters and Setters
-    
-    public Long getId() {
-        return id;
-    }
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
 
-    public Team getTeam() {
-        return team;
-    }
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public Tournament getTournament() {
-        return tournament;
-    }
+    public String getImageLink() { return imageLink; }
+    public void setImageLink(String imageLink) { this.imageLink = imageLink; }
 
-    public void setTournament(Tournament tournament) {
-        this.tournament = tournament;
-    }
+    public Date getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 
-    public Set<Fan> getFans() {
-        return fans;
-    }
+    public Date getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
 
-    public void setFans(Set<Fan> fans) {
-        this.fans = fans;
-    }
+    public Tournament getTournament() { return tournament; }
+    public void setTournament(Tournament tournament) { this.tournament = tournament; }
 
-    public String getContent() {
-        return content;
-    }
+    public Team getTeam() { return team; }
+    public void setTeam(Team team) { this.team = team; }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getImageLink() {
-        return imageLink;
-    }
-
-    public void setImageLink(String imageLink) {
-        this.imageLink = imageLink;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+    public Set<Fan> getFans() { return fans; }
+    public void setFans(Set<Fan> fans) { this.fans = fans; }
 }

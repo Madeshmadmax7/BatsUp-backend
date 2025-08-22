@@ -1,9 +1,8 @@
 package com.example.cricket_backend.entity;
 
 import jakarta.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.*;
 
 @Entity
 @Table(name = "tournaments")
@@ -35,51 +34,103 @@ public class Tournament {
     private String image;
 
     @ManyToMany
-    @JoinTable(
-        name = "tournament_teams",
-        joinColumns = @JoinColumn(name = "tournament_id"),
-        inverseJoinColumns = @JoinColumn(name = "team_id")
-    )
+    @JoinTable(name = "tournament_teams", joinColumns = @JoinColumn(name = "tournament_id"), inverseJoinColumns = @JoinColumn(name = "team_id"))
     private Set<Team> teams = new HashSet<>();
 
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
     private Set<Round> rounds = new HashSet<>();
 
-    @OneToOne(mappedBy = "tournament", cascade = CascadeType.ALL)
-    private NewsLetter newsletter;
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NewsLetter> newsletters = new ArrayList<>();
+
+    public List<NewsLetter> getNewsletters() {
+        return newsletters;
+    }
+
+    public void setNewsletters(List<NewsLetter> newsletters) {
+        this.newsletters = newsletters;
+    }
 
     // Getters and setters
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
+    public String getName() {
+        return name;
+    }
 
-    public Date getStartDate() { return startDate; }
-    public void setStartDate(Date startDate) { this.startDate = startDate; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Date getEndDate() { return endDate; }
-    public void setEndDate(Date endDate) { this.endDate = endDate; }
+    public String getLocation() {
+        return location;
+    }
 
-    public String getMatchType() { return matchType; }
-    public void setMatchType(String matchType) { this.matchType = matchType; }
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public Date getStartDate() {
+        return startDate;
+    }
 
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-    public Set<Team> getTeams() { return teams; }
-    public void setTeams(Set<Team> teams) { this.teams = teams; }
+    public Date getEndDate() {
+        return endDate;
+    }
 
-    public Set<Round> getRounds() { return rounds; }
-    public void setRounds(Set<Round> rounds) { this.rounds = rounds; }
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-    public NewsLetter getNewsletter() { return newsletter; }
-    public void setNewsletter(NewsLetter newsletter) { this.newsletter = newsletter; }
+    public String getMatchType() {
+        return matchType;
+    }
+
+    public void setMatchType(String matchType) {
+        this.matchType = matchType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Set<Round> getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(Set<Round> rounds) {
+        this.rounds = rounds;
+    }
+
 }

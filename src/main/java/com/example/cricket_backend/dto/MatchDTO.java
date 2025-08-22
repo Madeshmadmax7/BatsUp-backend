@@ -4,6 +4,7 @@ import java.util.List;
 
 public class MatchDTO {
     private Long id;
+
     private Long roundId;
 
     private Long teamOneId;
@@ -14,7 +15,17 @@ public class MatchDTO {
 
     private String status;
 
-    private List<ScoreCardDTO> scoreCards;
+    private Integer teamOneRuns;
+    private Integer teamOneWickets;
+    private Integer teamOneCatches;
+
+    private Integer teamTwoRuns;
+    private Integer teamTwoWickets;
+    private Integer teamTwoCatches;
+
+    private List<Long> scoreCardIds; // Optional, list of ScoreCard IDs if needed
+
+    // Getters and setters
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -37,6 +48,24 @@ public class MatchDTO {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public List<ScoreCardDTO> getScoreCards() { return scoreCards; }
-    public void setScoreCards(List<ScoreCardDTO> scoreCards) { this.scoreCards = scoreCards; }
+    public Integer getTeamOneRuns() { return teamOneRuns; }
+    public void setTeamOneRuns(Integer teamOneRuns) { this.teamOneRuns = teamOneRuns; }
+
+    public Integer getTeamOneWickets() { return teamOneWickets; }
+    public void setTeamOneWickets(Integer teamOneWickets) { this.teamOneWickets = teamOneWickets; }
+
+    public Integer getTeamOneCatches() { return teamOneCatches; }
+    public void setTeamOneCatches(Integer teamOneCatches) { this.teamOneCatches = teamOneCatches; }
+
+    public Integer getTeamTwoRuns() { return teamTwoRuns; }
+    public void setTeamTwoRuns(Integer teamTwoRuns) { this.teamTwoRuns = teamTwoRuns; }
+
+    public Integer getTeamTwoWickets() { return teamTwoWickets; }
+    public void setTeamTwoWickets(Integer teamTwoWickets) { this.teamTwoWickets = teamTwoWickets; }
+
+    public Integer getTeamTwoCatches() { return teamTwoCatches; }
+    public void setTeamTwoCatches(Integer teamTwoCatches) { this.teamTwoCatches = teamTwoCatches; }
+
+    public List<Long> getScoreCardIds() { return scoreCardIds; }
+    public void setScoreCardIds(List<Long> scoreCardIds) { this.scoreCardIds = scoreCardIds; }
 }

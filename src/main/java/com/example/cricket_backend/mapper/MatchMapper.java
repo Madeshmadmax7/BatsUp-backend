@@ -6,24 +6,37 @@ import com.example.cricket_backend.entity.Match;
 import java.util.stream.Collectors;
 
 public class MatchMapper {
+
     public static MatchDTO toDTO(Match match) {
         MatchDTO dto = new MatchDTO();
         dto.setId(match.getId());
-        dto.setRoundId(match.getRound() != null ? match.getRound().getId() : null);
+        if (match.getRound() != null) {
+            dto.setRoundId(match.getRound().getId());
+        }
 
         dto.setTeamOneId(match.getTeamOneId());
-        dto.setTeamOneName(match.getTeamOneName() != null ? match.getTeamOneName() : "TBD");
+        dto.setTeamOneName(match.getTeamOneName());
 
         dto.setTeamTwoId(match.getTeamTwoId());
-        dto.setTeamTwoName(match.getTeamTwoName() != null ? match.getTeamTwoName() : "TBD");
+        dto.setTeamTwoName(match.getTeamTwoName());
 
         dto.setStatus(match.getStatus());
 
+        dto.setTeamOneRuns(match.getTeamOneRuns());
+        dto.setTeamOneWickets(match.getTeamOneWickets());
+        dto.setTeamOneCatches(match.getTeamOneCatches());
+
+        dto.setTeamTwoRuns(match.getTeamTwoRuns());
+        dto.setTeamTwoWickets(match.getTeamTwoWickets());
+        dto.setTeamTwoCatches(match.getTeamTwoCatches());
+
         if (match.getScoreCards() != null) {
-            dto.setScoreCards(match.getScoreCards().stream()
-                    .map(ScoreCardMapper::toDTO)
-                    .collect(Collectors.toList()));
+            dto.setScoreCardIds(match.getScoreCards()
+                .stream()
+                .map(sc -> sc.getId())
+                .collect(Collectors.toList()));
         }
+
         return dto;
     }
 }
