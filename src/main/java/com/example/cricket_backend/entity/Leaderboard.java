@@ -39,8 +39,6 @@ public class Leaderboard implements Serializable {
     @Column(name = "net_run_rate", nullable = false)
     private Double netRunRate = 0.0;
 
-    // Getters and setters
-
     public Long getId() {
         return id;
     }
