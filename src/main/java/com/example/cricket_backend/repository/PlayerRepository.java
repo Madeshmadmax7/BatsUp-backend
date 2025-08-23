@@ -24,6 +24,8 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     Optional<Player> findByNicknameAndTeamAndUserIsNull(String nickname, Team team);
     Optional<Player> findByUser_Id(Long userId);
     
+    boolean existsByUserId(Long userId);
+    
     @EntityGraph(attributePaths = {"team", "team.tournaments"})
     Optional<Player> findWithTeamAndTournamentsById(Long id);
 }
