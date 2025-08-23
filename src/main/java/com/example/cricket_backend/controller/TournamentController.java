@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tournaments")
-@CrossOrigin(origins = "http://localhost:5173")  // Enable CORS for React dev origin
+@CrossOrigin(origins = "https://batsup.netlify.app")
 public class TournamentController {
 
     @Autowired

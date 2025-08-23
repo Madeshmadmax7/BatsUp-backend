@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/round")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://batsup.netlify.app")
 public class RoundController {
     @Autowired private RoundService roundService;
 

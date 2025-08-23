@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/newsletter")
+@CrossOrigin(origins = "https://batsup.netlify.app")
 public class NewsLetterController {
 
     @Autowired

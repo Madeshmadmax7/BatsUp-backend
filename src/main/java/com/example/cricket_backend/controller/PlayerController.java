@@ -14,7 +14,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/player")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://batsup.netlify.app")
 public class PlayerController {
 
     @Autowired

@@ -9,7 +9,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/fan")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
+@CrossOrigin(origins = "https://batsup.netlify.app")
 public class FanController {
 
     @Autowired private FanService fanService;
